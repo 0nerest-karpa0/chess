@@ -1,0 +1,59 @@
+﻿@using ChessLogic.Pieces
+@using ChessLogic
+
+@if(Piece == null)
+{
+	<div class="cell" onclick=@(HandleClick) style="background-color:@($"#{Convert.ToString(Color, 16)}");">
+		@if (Marked)
+		{
+			<div class="marking"></div>
+		}
+	</div>
+}
+else
+{
+	<div class="cell" onclick=@(HandleClick) style="background-color:@($"#{Convert.ToString(Color, 16)}"); background-image:@($"url({pieceImageUrl})")">
+		@if (Marked)
+		{
+			<div class="marking-capture"></div>
+		}
+	</div>
+}
+
+
+@code {
+	[Parameter]
+	public required int Color { get; set; }
+	[Parameter]
+	public Piece? Piece { get; set; }
+	[Parameter]
+	public required Game Game { get; set; }
+	[Parameter]
+	public bool Marked { get; set; } = false;
+	[Parameter]
+	public required ChessCoordinates CellCoordinates { get; set; }
+
+	private string? pieceImageUrl = null;
+
+	protected override void OnParametersSet()
+	{
+		if(Piece != null)
+		{
+			pieceImageUrl = Piece.GetImageUrl();
+		}
+	}
+
+	private void HandleClick()
+	{
+		if(Piece != null && !Marked)
+		{
+			ChessCoordinates[] moves = Piece.GetMoves(Game.Board);
+			Game.SelectCells(moves);
+			Game.SelectedPiece = Piece;
+		}
+		else if (Marked)
+		{
+			Game.MovePiece(CellCoordinates);
+		}
+	}
+}

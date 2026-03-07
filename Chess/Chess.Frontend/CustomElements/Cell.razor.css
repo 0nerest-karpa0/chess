@@ -1,0 +1,25 @@
+﻿.cell {
+    aspect-ratio: 1;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marking {
+    height: 40%;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background-color: #000;
+    opacity: 0.3;
+}
+
+.marking-capture {
+    height: 70%;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background-color: transparent;
+    opacity: 0.3;
+    border: black solid 1.3vh;
+}

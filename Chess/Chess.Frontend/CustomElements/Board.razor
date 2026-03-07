@@ -1,0 +1,56 @@
+﻿@using ChessLogic
+@using ChessLogic.Pieces
+
+<style>
+	.board{
+		display: grid;
+		grid-template-columns: repeat(8,1fr);
+		width: 35%;
+		aspect-ratio: 1;
+	}
+</style>
+
+<div class="board">
+	@for (int column = 0; column < Columns; column++)
+	{
+		for (int row = 0; row < Rows; row++)
+		{
+			int cellColor = 0;
+			if      (row % 2 == 0 && column % 2 != 0) cellColor = LightColor;
+			else if (row % 2 != 0 && column % 2 != 0) cellColor = DarkColor;
+			else if (row % 2 == 0 && column % 2 == 0) cellColor = DarkColor;
+			else if (row % 2 != 0 && column % 2 == 0) cellColor = LightColor;
+
+			int boardIndex = column * Rows + row;
+			<Cell Color=@cellColor Piece=@(board[boardIndex]) Game=@(game) Marked=@(game.IsCellSelected[boardIndex]) CellCoordinates="ChessCoordinates.FromPieceIndex(boardIndex)"/>
+			@* Cell cell = new Cell { Color = cellColor, Piece = board[boardIndex], Game = game }; *@
+			@* <DynamicComponent Type="typeof(Cell)" 
+				Parameters="@GetCellParameters(cellColor, game, boardIndex)"/>  *@
+		}
+	}
+</div>
+
+@code {
+	private const int Rows = Game.Rows;
+	private const int Columns = Game.Columns;
+
+	[Parameter]
+	public int DarkColor { get; set; }
+	[Parameter]
+	public int LightColor { get; set; }
+
+	private Game game = new Game();
+	private Piece?[] board;
+
+	protected override void OnInitialized()
+	{
+		board = game.Board;
+		game.UpdateBoard += StateHasChanged;
+		StateHasChanged();
+	}
+
+	private Dictionary<string, object> GetCellParameters(int cellColor, Game game, int boardIndex)
+	{
+		return new Dictionary<string, object> { { "Color", cellColor }, { "Piece", board[boardIndex] }, { "Game", game }, { "Marked", game.IsCellSelected[boardIndex] } };
+	}
+}
