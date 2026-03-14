@@ -7,9 +7,21 @@
 
         public Queen(PieceColor color) : base(color) { }
 
-        public override ChessCoordinates[] GetMoves(Piece?[] pieces)
+        public override Move[] GetMoves(Piece?[] pieces)
         {
-            throw new NotImplementedException();
+            List<Move> moves = new List<Move>();
+
+            moves.AddRange(GetMovesLine(0, 1, pieces));
+            moves.AddRange(GetMovesLine(0, -1, pieces));
+            moves.AddRange(GetMovesLine(1, 0, pieces));
+            moves.AddRange(GetMovesLine(-1, 0, pieces));
+
+            moves.AddRange(GetMovesLine(1, 1, pieces));
+            moves.AddRange(GetMovesLine(-1, 1, pieces));
+            moves.AddRange(GetMovesLine(1, -1, pieces));
+            moves.AddRange(GetMovesLine(-1, -1, pieces));
+
+            return moves.ToArray();
         }
     }
 }

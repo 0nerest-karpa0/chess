@@ -1,5 +1,6 @@
 ﻿using Chess.Frontend.ChessLogic.Pieces;
 using Chess.Frontend.CustomElements;
+using System.Drawing;
 
 namespace Chess.Frontend.ChessLogic
 {
@@ -11,6 +12,8 @@ namespace Chess.Frontend.ChessLogic
         public Piece?[] Board { get; set; } = GetBoardFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 1 2");
         public bool[] IsCellSelected { get; set; } = new bool[CellCount];
         public Piece? SelectedPiece { get; set; }
+        private Pawn? EnPassantPawn = null;
+        private Move[] moves;
         public event Action UpdateBoard;
 
         public static Piece?[] GetBoardFromFen(string fenString)
@@ -72,19 +75,22 @@ namespace Chess.Frontend.ChessLogic
             }
         }
 
-        public void SelectCells(ChessCoordinates[] cells)
+        public void SelectCells(Move[] moves)
         {
             IsCellSelected = new bool[CellCount];
-            foreach (ChessCoordinates cell in cells)
+            foreach (Move move in moves)
             {
-                IsCellSelected[cell.ToPieceIndex()] = true;
+                IsCellSelected[move.newPosition.ToPieceIndex()] = true;
             }
             UpdateBoard.Invoke();
+
+            this.moves = moves;
         }
 
         public void MovePiece(ChessCoordinates newPosition)
         {
             if (SelectedPiece == null) return;
+            MarkEnPassantPossibility(newPosition);
             int oldPieceIndex = SelectedPiece.Position.ToPieceIndex();
             int newPieceIndex = newPosition.ToPieceIndex();
 
@@ -96,7 +102,37 @@ namespace Chess.Frontend.ChessLogic
             IsCellSelected = new bool[CellCount];
             SelectedPiece = null;
 
+            Move move = FoundMove(newPosition);
+            if (move.EnPassantPawn != null)
+            {
+                Board[move.EnPassantPawn.Position.ToPieceIndex()] = null;
+            }
+
             UpdateBoard.Invoke();
+        }
+
+        public void MarkEnPassantPossibility(ChessCoordinates newPosition)
+        {
+            if (EnPassantPawn != null)
+            {
+                EnPassantPawn.canBeTakenByEnPassant = false;
+            }
+            if (SelectedPiece == null) return;
+            if (SelectedPiece.GetType() != typeof(Pawn)) return;
+
+            Pawn pawn = (Pawn)SelectedPiece;
+            pawn.canBeTakenByEnPassant = pawn.GetStartingRank() + 2 * pawn.GetMovingDirection() == newPosition.Number && pawn.Position.Number == pawn.GetStartingRank();
+            EnPassantPawn = pawn;
+        }
+
+        public Move FoundMove(ChessCoordinates newPosition)
+        {
+            foreach (Move move in moves)
+            {
+                if(move.newPosition.Equals(newPosition)) return move;
+            }
+
+            return null;
         }
     }
 }

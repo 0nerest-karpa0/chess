@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace Chess.Frontend.ChessLogic.Pieces
+namespace Chess.Frontend.ChessLogic
 {
     public class ChessCoordinates
     {
@@ -77,6 +77,15 @@ namespace Chess.Frontend.ChessLogic.Pieces
             {
                 return "NaC";
             }
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+            if (obj.GetType() != typeof(ChessCoordinates)) return false;
+
+            ChessCoordinates coordinates = (ChessCoordinates)obj;
+            return coordinates.IsValidCoordinates == IsValidCoordinates && coordinates.Letter == Letter && coordinates.Number == Number;
         }
     }
 }

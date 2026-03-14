@@ -47,7 +47,7 @@ else
 	{
 		if(Piece != null && !Marked)
 		{
-			ChessCoordinates[] moves = Piece.GetMoves(Game.Board);
+			Move[] moves = Piece.GetMoves(Game.Board);
 			Game.SelectCells(moves);
 			Game.SelectedPiece = Piece;
 		}

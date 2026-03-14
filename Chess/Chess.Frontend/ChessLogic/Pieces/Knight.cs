@@ -7,9 +7,9 @@
 
         public Knight(PieceColor color) : base(color) { }
 
-        public override ChessCoordinates[] GetMoves(Piece?[] pieces)
+        public override Move[] GetMoves(Piece?[] pieces)
         {
-           List<ChessCoordinates> moves = new List<ChessCoordinates>();
+           List<Move> moves = new List<Move>();
            List <ChessCoordinates> allPossibleMoves = new List<ChessCoordinates>
                 { Position.ApplyOffset(2, -1),    Position.ApplyOffset(2, 1), 
                     Position.ApplyOffset(-2, -1), Position.ApplyOffset(-2, 1),
@@ -25,7 +25,7 @@
 
                 if ( (pieces[move.ToPieceIndex()] != null && CanCapture(pieces[move.ToPieceIndex()])) || pieces[move.ToPieceIndex()] == null )
                 {
-                    moves.Add(move);
+                    moves.Add(new Move { newPosition = move });
                 }
             }
             return moves.ToArray();

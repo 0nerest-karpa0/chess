@@ -7,28 +7,14 @@
 
         public Bishop(PieceColor color) : base(color) { }
 
-        public override ChessCoordinates[] GetMoves(Piece?[] pieces)
+        public override Move[] GetMoves(Piece?[] pieces)
         {
-            List<ChessCoordinates> moves = new List<ChessCoordinates>();
+            List<Move> moves = new List<Move>();
 
-            for (int i = 0; ; i--)
-            {
-                ChessCoordinates move = new ChessCoordinates { Letter = Position.Letter + i, Number = Position.Number };
-
-                if (pieces[move.ToPieceIndex()] == null)
-                {
-                    moves.Add(move);
-                }
-                else if (CanCapture(pieces[move.ToPieceIndex()]))
-                {
-                    moves.Add(move);
-                    break;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            moves.AddRange(GetMovesLine(1, 1, pieces));
+            moves.AddRange(GetMovesLine(-1, 1, pieces));
+            moves.AddRange(GetMovesLine(1, -1, pieces));
+            moves.AddRange(GetMovesLine(-1, -1, pieces));
 
             return moves.ToArray();
         }
