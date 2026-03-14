@@ -18,5 +18,6 @@ namespace Chess.Backend.Db.Entities
 
         public User White { get; set; }
         public User Black { get; set; }
+        public ICollection<Move> Moves { get; set; }
     }
 }

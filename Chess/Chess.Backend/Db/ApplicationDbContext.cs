@@ -10,13 +10,16 @@ namespace Chess.Backend.Db
         {
         }
 
-        DbSet<Move> moves;
-        DbSet<User> users;
-        DbSet<Match> matches;
+        public DbSet<Move> Moves { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Match> Matches { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Match>().HasOne(m => m.White).WithMany().HasForeignKey(m => m.WhiteId).OnDelete(DeleteBehavior.Cascade);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Match>().HasOne(m => m.White).WithMany(u => u.MatchesAsWhite).HasForeignKey(m => m.WhiteId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Match>().HasOne(m => m.Black).WithMany(u => u.MatchesAsBlack).HasForeignKey(m => m.BlackId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Move>().HasOne(mv => mv.Match).WithMany(m => m.Moves).HasForeignKey(mv => mv.MatchId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Chess.Backend/Chess.Backend.csproj" />
   <Project Path="Chess.Frontend/Chess.Frontend.csproj" />
 </Solution>

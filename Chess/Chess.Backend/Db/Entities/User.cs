@@ -12,6 +12,7 @@ namespace Chess.Backend.Db.Entities
         [Required]
         public string Password { get; set; } = string.Empty;
 
-        public Match Match { get; set; }
+        public ICollection<Match> MatchesAsBlack { get; set; }
+        public ICollection<Match> MatchesAsWhite { get; set; }
     }
 }
