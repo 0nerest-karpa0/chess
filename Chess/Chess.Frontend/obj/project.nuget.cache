@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ODkRgyqD3zc=",
+  "dgSpecHash": "NsY06z9UcDU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Projects\\Chess\\Chess.Frontend\\Chess.Frontend.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.3\\microsoft.aspnetcore.app.internal.assets.10.0.3.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Shostak Vasilily\\repos\\chess\\Chess\\Chess.Frontend\\Chess.Frontend.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
