@@ -1,0 +1,50 @@
+﻿@using Chess.Frontend.ChessLogic
+@using Chess.Frontend.ChessLogic.Pieces
+
+@if (Visible)
+{
+    <div class="popup" style="top:@MarginTop; left:@MarginLeft;">
+        @foreach (Piece piece in pieces)
+        {
+            <div class="popup-piece" style="background-image: @($"url({piece.GetImageUrl()})");" onclick=@(() => HandleClick(piece))></div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public required string MarginTop { get; set; }
+    [Parameter]
+    public required string MarginLeft { get; set; }
+    [Parameter]
+    public required PieceColor PieceColor { get; set; }
+    [Parameter]
+    public required Game Game { get; set; } 
+    [Parameter]
+    public bool Visible { get; set;  } = false;
+    private Piece[] pieces;
+
+    protected override void OnParametersSet()
+    {
+        pieces = new Piece[] { new Queen(PieceColor), new Rook(PieceColor), new Knight(PieceColor), new Bishop(PieceColor) };
+    }
+
+    private void HandleClick(Piece piece)
+    {
+        Game.PromotePawn(piece);
+        StateHasChanged();
+    }
+
+    public class Parameters
+    {
+        public required string MarginTop { get; set; }
+        public required string MarginLeft { get; set; }
+        public required PieceColor PieceColor { get; set; }
+        public bool Visible { get; set; } = false;
+
+        public static Parameters DefaultParameters()
+        {
+            return new Parameters { MarginLeft = "0px", MarginTop = "0px", PieceColor = PieceColor.White, Visible = false };
+        }
+    }
+}

@@ -5,7 +5,7 @@
 	.board{
 		display: grid;
 		grid-template-columns: repeat(8,1fr);
-		width: 35%;
+		width: max(35vw, 35vh);
 		aspect-ratio: 1;
 	}
 </style>
@@ -22,13 +22,15 @@
 			else if (row % 2 != 0 && column % 2 == 0) cellColor = LightColor;
 
 			int boardIndex = column * Rows + row;
-			<Cell Color=@cellColor Piece=@(board[boardIndex]) Game=@(game) Marked=@(game.IsCellSelected[boardIndex]) CellCoordinates="ChessCoordinates.FromPieceIndex(boardIndex)"/>
-			@* Cell cell = new Cell { Color = cellColor, Piece = board[boardIndex], Game = game }; *@
-			@* <DynamicComponent Type="typeof(Cell)" 
-				Parameters="@GetCellParameters(cellColor, game, boardIndex)"/>  *@
+			boardIndex = GetBoardIndexOffset() - boardIndex;
+			<Cell Color="@cellColor" Piece="@(board[boardIndex])" Game="@(game)" MarkedMove="@(game.CellMoves[boardIndex])" />
+			
 		}
 	}
 </div>
+
+<PromotionPopup MarginLeft="@game.PopupParameters.MarginLeft" MarginTop="@game.PopupParameters.MarginTop"
+				PieceColor="@game.PopupParameters.PieceColor" Visible="@game.PopupParameters.Visible" Game= "@game"/>
 
 @code {
 	private const int Rows = Game.Rows;
@@ -42,6 +44,8 @@
 	private Game game = new Game();
 	private Piece?[] board;
 
+	private PieceColor playerColor = PieceColor.Black;
+
 	protected override void OnInitialized()
 	{
 		board = game.Board;
@@ -49,8 +53,9 @@
 		StateHasChanged();
 	}
 
-	private Dictionary<string, object> GetCellParameters(int cellColor, Game game, int boardIndex)
+	private int GetBoardIndexOffset()
 	{
-		return new Dictionary<string, object> { { "Color", cellColor }, { "Piece", board[boardIndex] }, { "Game", game }, { "Marked", game.IsCellSelected[boardIndex] } };
+		if (playerColor == PieceColor.White) return 0;
+		else return Game.CellCount - 1;
 	}
 }

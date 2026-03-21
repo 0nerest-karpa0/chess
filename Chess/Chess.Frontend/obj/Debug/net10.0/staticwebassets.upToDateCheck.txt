@@ -1,8 +1,8 @@
 wwwroot\app.css
 Components\Layout\ReconnectModal.razor.js
-C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.3\build\..\_framework\blazor.web.js
-C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.3\build\..\_framework\blazor.server.js
-C:\Users\user\Projects\Chess\Chess.Frontend\wwwroot\app.css
-C:\Users\user\Projects\Chess\Chess.Frontend\Components\Layout\ReconnectModal.razor.js
-C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.3\_framework\blazor.web.js
-C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.3\_framework\blazor.server.js
+C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.5\build\..\_framework\blazor.web.js
+C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.5\build\..\_framework\blazor.server.js
+C:\Users\user\Documents\GitHub\chess\Chess\Chess.Frontend\wwwroot\app.css
+C:\Users\user\Documents\GitHub\chess\Chess\Chess.Frontend\Components\Layout\ReconnectModal.razor.js
+C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.5\_framework\blazor.web.js
+C:\Users\user\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.5\_framework\blazor.server.js

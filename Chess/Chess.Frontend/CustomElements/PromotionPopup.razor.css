@@ -1,0 +1,16 @@
+﻿.popup {
+    position: absolute;
+    background-color: #918476;
+    opacity: 0.96;
+    width: 17.5%;
+    aspect-ratio: 4/1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.popup-piece {
+    aspect-ratio: 1;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border: solid 5px #918476;
+}

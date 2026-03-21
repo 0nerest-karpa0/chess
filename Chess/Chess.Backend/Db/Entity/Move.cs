@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Chess.Backend.Db.Entities
+namespace AuthSample.Backend.Entity
 {
     public class Move
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
-        public int MatchId { get; set; }
+        public Guid MatchId { get; set; }
         [Required]
         public string Board { get; set; } = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
         

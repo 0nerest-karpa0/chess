@@ -9,13 +9,13 @@ namespace Chess.Frontend.ChessLogic
         public const int Rows = 8;
         public const int Columns = 8;
         public const int CellCount = Rows * Columns;
-        public Piece?[] Board { get; set; } = GetBoardFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 1 2");
-        public bool[] IsCellSelected { get; set; } = new bool[CellCount];
-        public Piece? SelectedPiece { get; set; }
+        private string BoardSize = "max(35vw, 35vh)";
+        public Piece?[] Board { get; set; } = GetBoardFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 2");
+        public Move?[] CellMoves { get; set; } = new Move?[CellCount];
+        public Piece? SelectedPiece { get; set; } = null;
+        public PromotionPopup.Parameters PopupParameters { get; set; } = PromotionPopup.Parameters.DefaultParameters();
         private Pawn? EnPassantPawn = null;
-        private Move[] moves;
         public event Action UpdateBoard;
-
         public static Piece?[] GetBoardFromFen(string fenString)
         {
             Piece?[] board = new Piece?[CellCount];
@@ -77,21 +77,29 @@ namespace Chess.Frontend.ChessLogic
 
         public void SelectCells(Move[] moves)
         {
-            IsCellSelected = new bool[CellCount];
+            CellMoves = new Move?[CellCount];
             foreach (Move move in moves)
             {
-                IsCellSelected[move.newPosition.ToPieceIndex()] = true;
+                int pieceIndex = move.newPosition.ToPieceIndex();
+                CellMoves[pieceIndex] = move;
             }
             UpdateBoard.Invoke();
-
-            this.moves = moves;
         }
 
-        public void MovePiece(ChessCoordinates newPosition)
+        public void DeselectCells()
+        {
+            CellMoves = new Move?[CellCount];
+            UpdateBoard.Invoke();
+        }
+
+        public void MovePiece(Move move)
         {
             if (SelectedPiece == null) return;
-            MarkEnPassantPossibility(newPosition);
-            int oldPieceIndex = SelectedPiece.Position.ToPieceIndex();
+            ChessCoordinates newPosition = move.newPosition;
+
+            MarkEnPassantPossibility(move);
+            ChessCoordinates oldPosition = SelectedPiece.Position;
+            int oldPieceIndex = oldPosition.ToPieceIndex();
             int newPieceIndex = newPosition.ToPieceIndex();
 
             SelectedPiece.Position = newPosition;
@@ -99,40 +107,83 @@ namespace Chess.Frontend.ChessLogic
             Board[oldPieceIndex] = null;
             Board[newPieceIndex] = SelectedPiece;
 
-            IsCellSelected = new bool[CellCount];
-            SelectedPiece = null;
-
-            Move move = FoundMove(newPosition);
-            if (move.EnPassantPawn != null)
+            if (move.PopupParameters != null)
+            {
+                move.PopupParameters.MarginLeft = $"calc({BoardSize} + 5px)";
+                //move.PopupParameters.MarginTop = $"calc({BoardSize} / {Rows} * abs({newPosition.Number - Rows}) + 7px)";
+                move.PopupParameters.MarginTop = $"7px";
+                PopupParameters = move.PopupParameters;
+                DeselectCells();
+                UpdateBoard.Invoke();
+                return;
+            }
+            else if (move.EnPassantPawn != null)
             {
                 Board[move.EnPassantPawn.Position.ToPieceIndex()] = null;
             }
+            else if (!move.MarkAsNonCastling)
+            {
+                MarkAsNonCastling();
+            }
+            
+            if (move.CastlingRook != null)
+            {
+                Castle(move);
+            }
+
+            DeselectCells();
+            UpdateBoard.Invoke();
+        }
+
+        //TODO: while the popup is visible you can switch to the different piece and promote it
+        public void PromotePawn(Piece piece)
+        {
+            PopupParameters.Visible = false;
+
+            ChessCoordinates pawnPosition = SelectedPiece.Position;
+            piece.Position = pawnPosition;
+            Board[pawnPosition.ToPieceIndex()] = piece;
 
             UpdateBoard.Invoke();
         }
 
-        public void MarkEnPassantPossibility(ChessCoordinates newPosition)
+        private void MarkEnPassantPossibility(Move move)
         {
             if (EnPassantPawn != null)
             {
                 EnPassantPawn.canBeTakenByEnPassant = false;
             }
-            if (SelectedPiece == null) return;
-            if (SelectedPiece.GetType() != typeof(Pawn)) return;
 
-            Pawn pawn = (Pawn)SelectedPiece;
-            pawn.canBeTakenByEnPassant = pawn.GetStartingRank() + 2 * pawn.GetMovingDirection() == newPosition.Number && pawn.Position.Number == pawn.GetStartingRank();
-            EnPassantPawn = pawn;
+            if (move.CanBeTakenByEnPassant)
+            {
+                Pawn pawn = (Pawn)SelectedPiece;
+                pawn.canBeTakenByEnPassant = true;
+                EnPassantPawn = pawn;
+            }
         }
 
-        public Move FoundMove(ChessCoordinates newPosition)
+        private void MarkAsNonCastling()
         {
-            foreach (Move move in moves)
+            if (SelectedPiece.GetType() == typeof(Rook))
             {
-                if(move.newPosition.Equals(newPosition)) return move;
+                Rook rook = (Rook)SelectedPiece;
+                rook.CanCastle = false;
             }
+            else if(SelectedPiece.GetType() == typeof(King))
+            {
+                King rook = (King)SelectedPiece;
+                rook.CanCastle = false;
+            }
+        }
+        private void Castle(Move move)
+        {
+            ChessCoordinates oldPosition = move.CastlingRook.Position;
+            ChessCoordinates newPosition = move.CastlingRookNewPosition;
 
-            return null;
+            Board[oldPosition.ToPieceIndex()] = null;
+            Board[newPosition.ToPieceIndex()] = move.CastlingRook;
+            move.CastlingRook.Position = newPosition;
+            move.CastlingRook.CanCastle = false;
         }
     }
 }

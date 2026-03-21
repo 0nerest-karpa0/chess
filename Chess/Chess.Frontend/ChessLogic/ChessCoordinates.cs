@@ -44,6 +44,8 @@ namespace Chess.Frontend.ChessLogic
 
         public bool IsValidCoordinates = true;
 
+        public static readonly ChessCoordinates Invalid = new ChessCoordinates { Letter = -1, Number = -1 };
+
         public static ChessCoordinates FromPieceIndex(int pieceIndex)
         {
             int y = pieceIndex / Game.Rows;

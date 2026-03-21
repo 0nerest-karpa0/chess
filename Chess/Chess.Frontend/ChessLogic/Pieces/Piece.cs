@@ -1,4 +1,6 @@
-﻿namespace Chess.Frontend.ChessLogic.Pieces
+﻿using Chess.Frontend.CustomElements;
+
+namespace Chess.Frontend.ChessLogic.Pieces
 {
     public abstract class Piece
     {
@@ -12,7 +14,7 @@
             this.color = color;
         }
 
-        public virtual string GetImageUrl() //change to not abstract after testing
+        public virtual string GetImageUrl()
         {
             if (color == PieceColor.White) return PieceImageUrlWhite;
             else return PieceImageUrlBlack;
@@ -41,6 +43,39 @@
                 if (CanMoveHere(board, move, out needToBreak))
                 {
                     moves.Add(new Move { newPosition = move});
+                }
+
+                if (needToBreak) break;
+            }
+
+            return moves.ToArray();
+        }
+
+        protected Move[] GetMovesLine(int letterIncrease, int numberIncrease, Piece?[] board, Move moveParameters)
+        {
+            List<Move> moves = new List<Move>();
+
+            for (int i = 1; ; i++)
+            {
+                ChessCoordinates move = new ChessCoordinates
+                {
+                    Letter = Position.Letter + i * letterIncrease,
+                    Number = Position.Number + i * numberIncrease,
+                };
+                if (!move.IsValidCoordinates) break;
+                bool needToBreak = false;
+                if (CanMoveHere(board, move, out needToBreak))
+                {
+                    moves.Add(new Move
+                    {
+                        newPosition = move,
+                        CanBeTakenByEnPassant = moveParameters.CanBeTakenByEnPassant, 
+                        EnPassantPawn = moveParameters.EnPassantPawn,
+                        MarkAsNonCastling = moveParameters.MarkAsNonCastling,
+                        CastlingRook = moveParameters.CastlingRook,
+                        CastlingRookNewPosition = moveParameters.CastlingRookNewPosition,
+                        PopupParameters = moveParameters.PopupParameters
+                    });
                 }
 
                 if (needToBreak) break;
