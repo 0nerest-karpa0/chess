@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AuthSample.Backend.Entity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chess.Backend.Controllers
 {
@@ -42,7 +43,7 @@ namespace Chess.Backend.Controllers
         }
 
         [Authorize]
-        [HttpGet("connect/{matchId:guid}")]
+        [HttpPost("connect/{matchId:guid}")]
         public IActionResult Connect([FromRoute] Guid matchId)
         {
             Match? match = _context.Matches.Where(m => m.Id == matchId).FirstOrDefault();
@@ -69,7 +70,7 @@ namespace Chess.Backend.Controllers
         }
 
         [Authorize]
-        [HttpGet("switchsides/{matchId:guid}")]
+        [HttpPost("switchsides/{matchId:guid}")]
         public IActionResult SwitchSides([FromRoute] Guid matchId)
         {
             Match? match = _context.Matches.Where(m => m.Id == matchId).FirstOrDefault();
@@ -87,8 +88,47 @@ namespace Chess.Backend.Controllers
             }
             else
             {
-                return BadRequest("You can't switch side if you are not theS host of the match");
+                return BadRequest("You can't switch side if you are not the host of the match");
             }
+        }
+
+        [Authorize]
+        [HttpPost("start/{matchId:guid}")]
+        public IActionResult Start([FromRoute] Guid matchId)
+        {
+            Match? match = _context.Matches.Where(m => m.Id == matchId).FirstOrDefault();
+            if (match == null) return NotFound("there is no match with this id");
+
+            string userIdString = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value;
+            Guid userId = Guid.Parse(userIdString);
+
+            if (match.HostId != userId)
+            {
+                return BadRequest("You can't start match if you are not the host of the match");
+            }
+
+            if (match.BlackId == null || match.WhiteId == null)
+            {
+                return BadRequest("You need to have two players connected to match in order to start it");
+            }
+
+            match.isStarted = true;
+            Move moves = new Move { Id = Guid.NewGuid(), MatchId = matchId };
+            _context.Moves.Add(moves);
+
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        [HttpGet("board/{matchId:guid}")]
+        public IActionResult GetCurrentBoardState([FromRoute]Guid matchId)
+        {
+            Match? match = _context.Matches.Where(m => m.Id == matchId).Include(m => m.Moves).FirstOrDefault();
+            if (match == null) return NotFound("there is no match with this id");
+
+            if (!match.isStarted) return BadRequest("Match is not started yet");
+
+            return Ok(match.Moves.OrderBy(m => m.MoveCount).Last().Board);
         }
     }
 }

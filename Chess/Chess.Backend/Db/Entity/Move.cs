@@ -9,8 +9,9 @@ namespace AuthSample.Backend.Entity
         [Required]
         public Guid MatchId { get; set; }
         [Required]
+        public int MoveCount { get; set; } = 0;
+        [Required]
         public string Board { get; set; } = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
-        
         public Match Match { get; set; }
     }
 }

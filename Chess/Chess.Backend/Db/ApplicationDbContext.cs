@@ -11,6 +11,7 @@ public class ApplicationDbContext : DbContext
     }
     
     public DbSet<Match> Matches { get; set; }
+    public DbSet<Move> Moves { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     
@@ -19,10 +20,10 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Match>()
-                .HasOne(m => m.White)
-                .WithMany(u => u.MatchesAsWhite)
-                .HasForeignKey(m => m.WhiteId)
-                .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(m => m.White)
+            .WithMany(u => u.MatchesAsWhite)
+            .HasForeignKey(m => m.WhiteId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Match>()
             .HasOne(m => m.Black)
