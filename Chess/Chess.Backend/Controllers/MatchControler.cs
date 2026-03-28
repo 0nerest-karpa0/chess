@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AuthSample.Backend.Entity;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 
@@ -121,7 +120,7 @@ namespace Chess.Backend.Controllers
         }
 
         [HttpGet("board/{matchId:guid}")]
-        public IActionResult GetCurrentBoardState([FromRoute]Guid matchId)
+        public IActionResult GetCurrentBoardState([FromRoute] Guid matchId)
         {
             Match? match = _context.Matches.Where(m => m.Id == matchId).Include(m => m.Moves).FirstOrDefault();
             if (match == null) return NotFound("there is no match with this id");
@@ -130,5 +129,47 @@ namespace Chess.Backend.Controllers
 
             return Ok(match.Moves.OrderBy(m => m.MoveCount).Last().Board);
         }
+
+        [Authorize]
+        [HttpPost("makemove/{matchId:guid}")]
+        public IActionResult MakeMove([FromRoute] Guid matchId, [FromBody]MoveDto moveDto)
+        {
+            Match? match = _context.Matches.Where(m => m.Id == matchId).Include(m => m.Moves).FirstOrDefault();
+            if (match == null) return NotFound("there is no match with this id");
+            if (!match.isStarted) return BadRequest("Match is not started yet");
+
+            string userIdString = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value;
+            Guid userId = Guid.Parse(userIdString);
+            string userColor = "";
+
+            if(match.BlackId == userId) userColor = "b";
+            else if(match.WhiteId == userId) userColor = "w";
+            else return BadRequest("You are not connected to this match");
+
+            Move lastMove = match.Moves.OrderBy(m => m.MoveCount).Last();
+            string lastMoveFen = match.Moves.OrderBy(m => m.MoveCount).Last().Board;
+            string[] fenFields = lastMoveFen.Split(' ');
+            string lastMoveColor = fenFields[1];
+            
+            if(lastMoveColor == userColor)
+            {
+                return BadRequest("Its not your move yet");
+            }
+
+            Move move = new Move { Board = moveDto.Board, MatchId = match.Id, MoveCount = lastMove.MoveCount + 1, IsCheckmate = moveDto.IsCheckmate, IsDraw = moveDto.IsDraw };
+            _context.Moves.Add(move);
+
+            match.isEnded = moveDto.IsCheckmate || moveDto.IsDraw;
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+    }
+
+    public class MoveDto
+    {
+        public string Board { get; set; }
+        public bool IsCheckmate { get; set; } = false;
+        public bool IsDraw { get; set; } = false;
     }
 }
