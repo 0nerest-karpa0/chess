@@ -165,11 +165,4 @@ namespace Chess.Backend.Controllers
             return NoContent();
         }
     }
-
-    public class MoveDto
-    {
-        public string Board { get; set; }
-        public bool IsCheckmate { get; set; } = false;
-        public bool IsDraw { get; set; } = false;
-    }
 }

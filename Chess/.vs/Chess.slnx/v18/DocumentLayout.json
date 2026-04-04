@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\chess.frontend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\chess.frontend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\chess.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\chess.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\controllers\\matchcontroler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\controllers\\matchcontroler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\migrations\\20260321062207_addmatchhost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\migrations\\20260321062207_addmatchhost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\matchhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\matchhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\migrations\\applicationdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,45 +62,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Program.cs",
-              "RelativeDocumentMoniker": "Chess.Frontend\\Program.cs",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Program.cs",
-              "RelativeToolTip": "Chess.Frontend\\Program.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAnwBgAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T11:31:43.05Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Chess.Frontend",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Chess.Frontend.csproj",
-              "RelativeDocumentMoniker": "Chess.Frontend\\Chess.Frontend.csproj",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Chess.Frontend.csproj",
-              "RelativeToolTip": "Chess.Frontend\\Chess.Frontend.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAaAAAAAAAAAA==",
+              "Title": "Chess.Backend",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Chess.Backend.csproj",
+              "RelativeDocumentMoniker": "Chess.Backend\\Chess.Backend.csproj",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Chess.Backend.csproj*",
+              "RelativeToolTip": "Chess.Backend\\Chess.Backend.csproj*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-21T11:28:26.16Z",
+              "WhenOpened": "2026-04-04T09:15:32.859Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "20260321062207_AddMatchHost.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Migrations\\20260321062207_AddMatchHost.cs",
-              "RelativeDocumentMoniker": "Chess.Backend\\Migrations\\20260321062207_AddMatchHost.cs",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Migrations\\20260321062207_AddMatchHost.cs",
-              "RelativeToolTip": "Chess.Backend\\Migrations\\20260321062207_AddMatchHost.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAvAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "MatchHub.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\MatchHub.cs",
+              "RelativeDocumentMoniker": "Chess.Backend\\MatchHub.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\MatchHub.cs*",
+              "RelativeToolTip": "Chess.Backend\\MatchHub.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T06:22:55.9Z",
+              "WhenOpened": "2026-04-04T08:51:50.843Z",
               "EditorCaption": ""
             },
             {
@@ -113,33 +100,45 @@
               "RelativeToolTip": "Chess.Backend\\Migrations\\ApplicationDbContextModelSnapshot.cs",
               "ViewState": "AgIAAJ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T06:20:48.835Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T06:20:48.835Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Chess.Backend\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\AuthController.cs",
               "RelativeToolTip": "Chess.Backend\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-21T05:23:55.136Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "MatchControler.cs",
               "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\MatchControler.cs",
               "RelativeDocumentMoniker": "Chess.Backend\\Controllers\\MatchControler.cs",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\MatchControler.cs",
-              "RelativeToolTip": "Chess.Backend\\Controllers\\MatchControler.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAAAFkAAABMAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\MatchControler.cs*",
+              "RelativeToolTip": "Chess.Backend\\Controllers\\MatchControler.cs*",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAkwKYAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-21T05:17:28.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Program.cs",
+              "RelativeDocumentMoniker": "Chess.Frontend\\Program.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Program.cs",
+              "RelativeToolTip": "Chess.Frontend\\Program.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAnwBgAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-21T11:31:43.05Z",
               "EditorCaption": ""
             },
             {
@@ -152,8 +151,7 @@
               "RelativeToolTip": "Chess.Backend\\appsettings.Development.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAB9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-21T06:09:20.006Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T06:09:20.006Z"
             },
             {
               "$type": "Document",
@@ -165,8 +163,7 @@
               "RelativeToolTip": "Chess.Backend\\Db\\ApplicationDbContext.cs",
               "ViewState": "AgIAABkAAAAAAAAAAAAcwBgAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T05:55:56.504Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T05:55:56.504Z"
             },
             {
               "$type": "Document",
@@ -178,8 +175,7 @@
               "RelativeToolTip": "Chess.Backend\\Migrations\\20260320164424_init.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T06:05:53.994Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T06:05:53.994Z"
             },
             {
               "$type": "Document",
@@ -191,8 +187,7 @@
               "RelativeToolTip": "Chess.Backend\\Db\\Entity\\User.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T05:17:11.834Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T05:17:11.834Z"
             },
             {
               "$type": "Document",
@@ -204,8 +199,7 @@
               "RelativeToolTip": "Chess.Backend\\Db\\Entity\\RefreshToken.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T05:17:07.968Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T05:17:07.968Z"
             },
             {
               "$type": "Document",
@@ -217,8 +211,7 @@
               "RelativeToolTip": "Chess.Backend\\Db\\Entity\\Move.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T05:17:06.049Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T05:17:06.049Z"
             },
             {
               "$type": "Document",
@@ -230,8 +223,7 @@
               "RelativeToolTip": "Chess.Backend\\Db\\Entity\\Match.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAmwBQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T05:17:03.699Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T05:17:03.699Z"
             }
           ]
         }
