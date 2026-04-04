@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using AuthSample.Backend.Entity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Chess.Backend.Dto;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chess.Backend.Controllers
 {
@@ -11,9 +13,11 @@ namespace Chess.Backend.Controllers
     public class MatchController : ControllerBase
     {
         private ApplicationDbContext _context;
-        public MatchController(ApplicationDbContext context)
+        private IHubContext<MatchHub> _hub;
+        public MatchController(ApplicationDbContext context, IHubContext<MatchHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         [Authorize]
@@ -38,6 +42,7 @@ namespace Chess.Backend.Controllers
             _context.Matches.Add(match);
             _context.SaveChanges();
 
+            _hub.Groups.AddToGroupAsync(userId.ToString(), match.Id.ToString());
             return Ok(match.Id);
         }
 
@@ -65,6 +70,44 @@ namespace Chess.Backend.Controllers
             }
 
             _context.SaveChanges();
+
+            _hub.Groups.AddToGroupAsync(userId.ToString(), match.Id.ToString());
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPost("disconnect/{matchId:guid}")]
+        public IActionResult Disconnect([FromRoute] Guid matchId)
+        {
+            Match? match = _context.Matches.Where(m => m.Id == matchId).FirstOrDefault();
+            if (match == null) return NotFound("there is no match with this id");
+            if (match.isStarted)
+            {
+                return BadRequest("You cant disconnect from stared match");
+            }
+
+            string userIdString = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value;
+            Guid userId = Guid.Parse(userIdString);
+
+            if (match.HostId == userId)
+            {
+                _context.Matches.Remove(match);
+            }
+            else if(match.BlackId == userId)
+            {
+                match.BlackId = null;
+            }
+            else if(match.WhiteId == userId)
+            {
+                match.WhiteId = null;
+            }
+            else
+            {
+                BadRequest("You are not connected to this match");
+            }
+            _context.SaveChanges();
+            _hub.Groups.RemoveFromGroupAsync(userId.ToString(), matchId.ToString());
+
             return NoContent();
         }
 
@@ -162,6 +205,7 @@ namespace Chess.Backend.Controllers
             match.isEnded = moveDto.IsCheckmate || moveDto.IsDraw;
             _context.SaveChanges();
 
+            _hub.Clients.Group(matchId.ToString()).SendAsync("ReceiveMove", moveDto);
             return NoContent();
         }
     }

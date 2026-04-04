@@ -15,9 +15,4 @@ namespace Chess.Backend
             await Clients.OthersInGroup(matchId.ToString()).SendAsync("Receive", move);
         }
     }
-
-    public class MoveDto
-    {
-        public
-    }
 }
