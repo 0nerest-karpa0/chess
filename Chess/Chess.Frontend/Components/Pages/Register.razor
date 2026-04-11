@@ -1,0 +1,61 @@
+﻿@inject HttpClient Client
+@page "/register"
+
+@using System.Net.Mime
+@using System.Text
+@using System.Text.Json
+
+<PageTitle>welcome</PageTitle>
+
+<div class="register-box">
+    <h3>Let's play some chess!</h3>
+    <div class="fields-grid">
+        <span>Login</span>
+        <input type="text" @oninput="e => login = e.Value.ToString()">
+        <span>Password</span>
+        <input type="password" @oninput="e => password = e.Value.ToString()">
+    </div>
+
+    <input type="button" value="Register" class="button" @onclick="SendRegisterRequest">
+
+    @response
+</div>
+
+@code {
+    string login = string.Empty;
+    string password = string.Empty;
+    string response = "";
+
+    private async void SendRegisterRequest(MouseEventArgs e)
+    {
+        //throw new Exception();
+        if (password == string.Empty || login == string.Empty) return;
+        string body = "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}";
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/register");
+        var content = new System.Net.Http.StringContent(body, Encoding.UTF8, "application/json");
+        request.Content = content;
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            this.response = await response.Content.ReadAsStringAsync();
+            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(this.response);
+        }
+        else
+        {
+            this.response = response.StatusCode.ToString();
+        }
+    }
+
+
+
+    public class RegisterResponse
+    {
+        public string accessToken { get; set; }
+        public string refreshToken { get; set; }
+        public string userId { get; set; }
+    }
+}
+
+}

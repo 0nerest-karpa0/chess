@@ -1,7 +1,11 @@
-﻿@using Chess.Frontend.ChessLogic.Pieces
-@using Chess.Frontend.CustomElements
-@using ChessLogic
+﻿@inject HttpClient Client
 @page "/"
 
-<PageTitle>Home</PageTitle>
-<Board LightColor=0xffcf9f DarkColor=0xd28c45 />
+<input type="button" value="Create new match" @onclick="CreateMatch">
+
+@code {
+    private void CreateMatch(MouseEventArgs args)
+    {
+        
+    }
+}

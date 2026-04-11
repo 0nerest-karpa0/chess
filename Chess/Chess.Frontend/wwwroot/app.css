@@ -36,3 +36,15 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+body{
+    margin:0px;
+    background-color:var(--background-color);
+    font-family:Arial;
+}
+
+:root {
+    --background-color: #000000;
+    --background-ancient-color: #191919ff;
+    --color-ancient: #4a5138ff;
+}

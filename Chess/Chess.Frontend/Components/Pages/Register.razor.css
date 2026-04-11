@@ -1,0 +1,49 @@
+﻿.register-box {
+    text-align: center;
+    width: 25%;
+    aspect-ratio: 4;
+    display: flex;
+    flex-direction: column;
+    color: #f2f2f2ff;
+    background-color: var(--background-ancient-color);
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 25%;
+    transform: translate(-50%, -50%);
+    padding-bottom: 5px;
+}
+
+.fields-grid {
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 90%;
+    gap: 5px;
+    align-self: center;
+    margin: auto;
+    padding-bottom: 5px;
+}
+
+    .fields-grid > input {
+        border: 3px solid var(--color-ancient);
+        font-family: inherit;
+    }
+
+    .fields-grid > span {
+        align-self: end;
+        justify-self: flex-start;
+    }
+
+.button {
+    background-color: var(--color-ancient);
+    border: none;
+    width: 25%;
+    align-self: center;
+    color: #f2f2f2ff;
+    font-family: 'Cascadia Code';
+    margin: 10px;
+}
+
+    .button:active {
+        background-color: var(--accent);
+    }
