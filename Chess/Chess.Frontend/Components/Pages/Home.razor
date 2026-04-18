@@ -1,5 +1,6 @@
 ﻿@inject HttpClient Client
 @inject ProtectedLocalStorage localStorage;
+@inject NavigationManager navigation;
 @page "/"
 
 @using Chess.Frontend.Dto
@@ -11,7 +12,14 @@
 <div class= "wrapper">
     
     <hr/>
-    <input class="button" type="button" value="Create new match" @onclick="CreateMatch"/>
+
+    <dvi class="create-wrapper">
+        <input class="button" type="button" value="Create new match" @onclick="CreateMatch" />
+        <input class="color-selection-button" 
+            style="background-color: @GetButtonColor(); color: @GetBorderColor(); border: solid 3px @GetBorderColor();"
+            value="@GetButtonText()" @onclick="ChangeColor" type="button" />
+    </dvi>
+    
 
     @if (refreshTokenExpired)
     {
@@ -35,15 +43,23 @@
     bool refreshTokenExpired = false;
     Guid? matchId = null;
 
+    char color = 'w';
+
     protected async override void OnAfterRender(bool firstRender)
     {
         var obj = await localStorage.GetAsync<string>("accessToken");
         accessToken = obj.Value;
     }
 
+    private async void ChangeColor()
+    {
+        if (color == 'w') color = 'b';
+        else color = 'w';
+    }
+
     private async void CreateMatch()
     {
-        using var request = new HttpRequestMessage(HttpMethod.Post, "match/host/w");
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"match/host/{color}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
         var response = Client.Send(request);
@@ -51,6 +67,7 @@
         {
             string responseContent = await response.Content.ReadAsStringAsync();
             matchId = JsonSerializer.Deserialize<Guid>(responseContent);
+            navigation.NavigateTo($"/game/{matchId}");
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
@@ -59,6 +76,8 @@
             {
                 CreateMatch();
             }
+
+            refreshTokenExpired = !successfulRefresh;
             StateHasChanged();
         }
         else
@@ -90,7 +109,24 @@
             accessToken = registerResponse.accessToken;
         }
 
-        refreshTokenExpired = true;
         return response.IsSuccessStatusCode;
+    }
+
+    private string GetButtonColor()
+    {
+        if (color == 'w') return "white";
+        else return "black";
+    }
+
+    private string GetBorderColor()
+    {
+        if (color != 'w') return "white";
+        else return "black";
+    }
+
+    private string GetButtonText()
+    {
+        if (color == 'w') return "White";
+        else return "Black";
     }
 }

@@ -48,7 +48,8 @@ hr {
     border: none;
 }
 
-.color-selection-button{
-    width:25%;
-
+.color-selection-button {
+    width: max-content;
+    color: var(--text-color);
+    height: 100%;
 }

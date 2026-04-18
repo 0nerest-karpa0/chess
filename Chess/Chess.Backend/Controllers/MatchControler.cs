@@ -93,11 +93,11 @@ namespace Chess.Backend.Controllers
             {
                 _context.Matches.Remove(match);
             }
-            else if(match.BlackId == userId)
+            else if (match.BlackId == userId)
             {
                 match.BlackId = null;
             }
-            else if(match.WhiteId == userId)
+            else if (match.WhiteId == userId)
             {
                 match.WhiteId = null;
             }
@@ -175,7 +175,7 @@ namespace Chess.Backend.Controllers
 
         [Authorize]
         [HttpPost("makemove/{matchId:guid}")]
-        public IActionResult MakeMove([FromRoute] Guid matchId, [FromBody]MoveDto moveDto)
+        public IActionResult MakeMove([FromRoute] Guid matchId, [FromBody] MoveDto moveDto)
         {
             Match? match = _context.Matches.Where(m => m.Id == matchId).Include(m => m.Moves).FirstOrDefault();
             if (match == null) return NotFound("there is no match with this id");
@@ -185,16 +185,16 @@ namespace Chess.Backend.Controllers
             Guid userId = Guid.Parse(userIdString);
             string userColor = "";
 
-            if(match.BlackId == userId) userColor = "b";
-            else if(match.WhiteId == userId) userColor = "w";
+            if (match.BlackId == userId) userColor = "b";
+            else if (match.WhiteId == userId) userColor = "w";
             else return BadRequest("You are not connected to this match");
 
             Move lastMove = match.Moves.OrderBy(m => m.MoveCount).Last();
             string lastMoveFen = match.Moves.OrderBy(m => m.MoveCount).Last().Board;
             string[] fenFields = lastMoveFen.Split(' ');
             string lastMoveColor = fenFields[1];
-            
-            if(lastMoveColor == userColor)
+
+            if (lastMoveColor == userColor)
             {
                 return BadRequest("Its not your move yet");
             }
@@ -207,6 +207,38 @@ namespace Chess.Backend.Controllers
 
             //_hub.Clients.Group(matchId.ToString()).SendAsync("ReceiveMove", moveDto);
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpGet("info/{matchId:guid}")]
+        public IActionResult GetInfo([FromRoute] Guid matchId)
+        {
+            Match? match = _context.Matches.Where(m => m.Id == matchId).Include(m => m.White).Include(m => m.Black).FirstOrDefault();
+            if (match == null) return NotFound("there is no match with this id");
+
+            string userIdString = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value;
+            Guid userId = Guid.Parse(userIdString);
+
+            User white = match.White;
+            User black = match.Black;
+
+            return Ok(
+                new GetInfoResult 
+                { 
+                    WhiteLogin = white != null ? white.Login:null, 
+                    BlackLogin = black != null ? black.Login:null, 
+                    IsHost = userId == match.HostId, 
+                    IsStarted = match.isStarted
+                }
+            );
+        }
+
+        public class GetInfoResult
+        {
+            public string? WhiteLogin { get; set; }
+            public string? BlackLogin { get; set; }
+            public bool IsHost { get; set; }
+            public bool IsStarted { get; set; }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@inject HttpClient Client
 @inject ProtectedLocalStorage localStorage;
+@inject NavigationManager navigation;
 @page "/register"
 
 @using System.Net.Mime
@@ -17,21 +18,48 @@
         <input type="text" @oninput="e => login = e.Value.ToString()">
         <span>Password</span>
         <input type="password" @oninput="e => password = e.Value.ToString()">
+        <span>Confirm password</span>
+        <input type="password" @oninput="e => password2 = e.Value.ToString()">
     </div>
 
     <input type="button" value="Register" class="button" @onclick="SendRegisterRequest">
 
-    @response
+    <p style="color:red">@errorMessage</p>
 </div>
 
 @code {
     string login = string.Empty;
     string password = string.Empty;
-    string response = "";
+    string password2 = string.Empty;
+    string errorMessage = "";
 
     private async void SendRegisterRequest(MouseEventArgs e)
     {
-        if (password == string.Empty || login == string.Empty) return;
+        if (password == string.Empty) 
+        {
+            errorMessage = "Password field cant be empty";
+            return; 
+        }
+        else if (login == string.Empty)
+        {
+            errorMessage = "Login field cant be empty";
+            return;
+        }
+        else if (password.Length < 8)
+        {
+            errorMessage = "Password must be at least 8 characters long";
+            return;
+        }
+        else if(login.Length < 3 || login.Length > 100)
+        {
+            errorMessage = "Login must be in range from 3 to 100 characters long";
+            return;
+        }
+        else if(password != password2)
+        {
+            errorMessage = "Passwords are differ from one another";
+        }
+
         string body = "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}";
 
         using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/register");
@@ -39,17 +67,28 @@
         request.Content = content;
 
         var response = Client.Send(request);
+        string responseContent = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
         {
-            this.response = await response.Content.ReadAsStringAsync();
-            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(this.response);
+            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent);
             await localStorage.SetAsync("accessToken", $"{registerResponse.accessToken}");
             await localStorage.SetAsync("refreshToken", $"{registerResponse.refreshToken}");
             await localStorage.SetAsync("userId", $"{registerResponse.userId}");
+
+            navigation.NavigateTo("/");
         }
         else
         {
-            this.response = response.StatusCode.ToString();
+            ErrorResponse? errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseContent);
+
+            if(errorResponse == null)
+            {
+                errorMessage = "Error "+ response.StatusCode.ToString();
+            }
+            else
+            {
+                errorMessage = errorResponse.message;
+            }
         }
     }
 }

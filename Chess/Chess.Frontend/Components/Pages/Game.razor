@@ -1,7 +1,26 @@
 ﻿@using Chess.Frontend.ChessLogic.Pieces
 @using Chess.Frontend.CustomElements
 @using ChessLogic
-@page "/game"
+@page "/game/{matchId:guid}"
 
-<PageTitle>Home</PageTitle>
-<Board LightColor=0xffcf9f DarkColor=0xd28c45 />
+<PageTitle>Match</PageTitle>
+@if (isStarted)
+{
+    <Board LightColor=0xffcf9f DarkColor=0xd28c45 />
+}
+else
+{
+    <div>
+
+    </div>
+}
+
+
+@code{
+    bool isStarted = false;
+
+    public void GetInfo()
+    {
+        
+    }
+}
