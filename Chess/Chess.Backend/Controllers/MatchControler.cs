@@ -13,15 +13,15 @@ namespace Chess.Backend.Controllers
     public class MatchController : ControllerBase
     {
         private ApplicationDbContext _context;
-        private IHubContext<MatchHub> _hub;
-        public MatchController(ApplicationDbContext context, IHubContext<MatchHub> hub)
+        //private IHubContext<MatchHub> _hub;
+        public MatchController(ApplicationDbContext context/*, IHubContext<MatchHub> hub*/)
         {
             _context = context;
-            _hub = hub;
+            //_hub = hub;
         }
 
         [Authorize]
-        [HttpGet("host/{color:alpha}")]
+        [HttpPost("host/{color:alpha}")]
         public IActionResult HostMatch([FromRoute] char color)
         {
             if (color != 'w' && color != 'b') return BadRequest("color must be \"w\" for white or \"b\" for black");
@@ -42,7 +42,7 @@ namespace Chess.Backend.Controllers
             _context.Matches.Add(match);
             _context.SaveChanges();
 
-            _hub.Groups.AddToGroupAsync(userId.ToString(), match.Id.ToString());
+            //_hub.Groups.AddToGroupAsync(userId.ToString(), match.Id.ToString());
             return Ok(match.Id);
         }
 
@@ -71,7 +71,7 @@ namespace Chess.Backend.Controllers
 
             _context.SaveChanges();
 
-            _hub.Groups.AddToGroupAsync(userId.ToString(), match.Id.ToString());
+            //_hub.Groups.AddToGroupAsync(userId.ToString(), match.Id.ToString());
             return NoContent();
         }
 
@@ -106,7 +106,7 @@ namespace Chess.Backend.Controllers
                 BadRequest("You are not connected to this match");
             }
             _context.SaveChanges();
-            _hub.Groups.RemoveFromGroupAsync(userId.ToString(), matchId.ToString());
+            //_hub.Groups.RemoveFromGroupAsync(userId.ToString(), matchId.ToString());
 
             return NoContent();
         }
@@ -205,7 +205,7 @@ namespace Chess.Backend.Controllers
             match.isEnded = moveDto.IsCheckmate || moveDto.IsDraw;
             _context.SaveChanges();
 
-            _hub.Clients.Group(matchId.ToString()).SendAsync("ReceiveMove", moveDto);
+            //_hub.Clients.Group(matchId.ToString()).SendAsync("ReceiveMove", moveDto);
             return NoContent();
         }
     }

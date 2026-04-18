@@ -45,6 +45,7 @@ body{
 
 :root {
     --background-color: #000000;
-    --background-ancient-color: #191919ff;
-    --color-ancient: #4a5138ff;
+    --background-ancient-color: #191919;
+    --ancient-color: #4a5138;
+    --text-color: #f2f2f2;
 }

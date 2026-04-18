@@ -1,11 +1,96 @@
 ﻿@inject HttpClient Client
+@inject ProtectedLocalStorage localStorage;
 @page "/"
 
-<input type="button" value="Create new match" @onclick="CreateMatch">
+@using Chess.Frontend.Dto
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using System.Net.Http.Headers
+@using System.Text
+@using System.Text.Json
 
-@code {
-    private void CreateMatch(MouseEventArgs args)
+<div class= "wrapper">
+    
+    <hr/>
+    <input class="button" type="button" value="Create new match" @onclick="CreateMatch"/>
+
+    @if (refreshTokenExpired)
     {
-        
+        <p style="color:red">Refresh Token Was Expired. You need to re-login <a href="/login">here</a>.</p>
+    }
+    else if (unknownError)
+    {
+        <p style="color:red">Unknown error</p>
+    }
+
+    <h4>OR</h4>
+    <div class="connect-wrapper">
+            <input class="id-box" type="text" placeholder="Enter Match Id" />
+            <input class="connect-button" type="button" value="Connect" />
+    </div>
+</div>
+@code {
+    string? accessToken;
+    bool IsRegister { get { return accessToken == null; } }
+    bool unknownError = false;
+    bool refreshTokenExpired = false;
+    Guid? matchId = null;
+
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        var obj = await localStorage.GetAsync<string>("accessToken");
+        accessToken = obj.Value;
+    }
+
+    private async void CreateMatch()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "match/host/w");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            matchId = JsonSerializer.Deserialize<Guid>(responseContent);
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            bool successfulRefresh = await RefreshAccessToken();
+            if (successfulRefresh)
+            {
+                CreateMatch();
+            }
+            StateHasChanged();
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+
+    private async Task<bool> RefreshAccessToken()
+    {
+        var userId = await localStorage.GetAsync<string>("userId");
+        var refreshToken = await localStorage.GetAsync<string>("refreshToken");
+
+        string body = "{\"userId\":\"" + userId.Value + "\",\"refreshToken\":\"" + refreshToken.Value + "\"}";
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/refresh");
+        var content = new System.Net.Http.StringContent(body, Encoding.UTF8, "application/json");
+        request.Content = content;
+
+        var response = Client.Send(request);
+        string responseContent = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent);
+            await localStorage.SetAsync("accessToken", $"{registerResponse.accessToken}");
+            await localStorage.SetAsync("refreshToken", $"{registerResponse.refreshToken}");
+            await localStorage.SetAsync("userId", $"{registerResponse.userId}");
+
+            accessToken = registerResponse.accessToken;
+        }
+
+        refreshTokenExpired = true;
+        return response.IsSuccessStatusCode;
     }
 }

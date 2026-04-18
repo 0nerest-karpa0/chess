@@ -1,4 +1,5 @@
 using Chess.Frontend.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace Chess.Frontend
 {
@@ -13,6 +14,7 @@ namespace Chess.Frontend
                 .AddInteractiveServerComponents();
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7050") });
+            builder.Services.AddScoped<ProtectedLocalStorage>();
 
             var app = builder.Build();
 

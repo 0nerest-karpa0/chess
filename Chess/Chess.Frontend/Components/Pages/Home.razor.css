@@ -1,0 +1,54 @@
+﻿.wrapper {
+    text-align: center;
+    width: 80%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    color: #f2f2f2ff;
+    background-color: var(--background-ancient-color);
+    position: absolute;
+    margin-left: 50%;
+    transform: translate(-50%, 0%);
+    padding-bottom: 5px;
+}
+
+
+hr {
+    width: 50%;
+    color: var(--ancient-color);
+    margin-bottom: 2%;
+}
+
+.button {
+    width: max-content;
+    align-self: center;
+    background-color: var(--ancient-color);
+    color: var(--text-color);
+    height: max-content;
+    border: solid 5px var(--ancient-color);
+}
+
+.id-box {
+    align-self: center;
+}
+
+.connect-wrapper {
+    display: grid;
+    grid-template-columns: auto min-content;
+    gap: 10%;
+    width: 45%;
+    align-self: center;
+}
+
+.connect-button {
+    width: max-content;
+    background-color: var(--ancient-color);
+    color: var(--text-color);
+    height: 100%;
+    border: none;
+}
+
+.color-selection-button{
+    width:25%;
+
+}

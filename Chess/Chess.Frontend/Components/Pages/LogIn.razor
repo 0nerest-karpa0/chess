@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Client
 @inject ProtectedLocalStorage localStorage;
-@page "/register"
+@page "/login"
 
 @using System.Net.Mime
 @using System.Text
@@ -11,7 +11,7 @@
 <PageTitle>welcome</PageTitle>
 
 <div class="register-box">
-    <h3>Let's play some chess!</h3>
+    <h3>Welcome back!</h3>
     <div class="fields-grid">
         <span>Login</span>
         <input type="text" @oninput="e => login = e.Value.ToString()">
@@ -19,7 +19,7 @@
         <input type="password" @oninput="e => password = e.Value.ToString()">
     </div>
 
-    <input type="button" value="Register" class="button" @onclick="SendRegisterRequest">
+    <input type="button" value="Login" class="button" @onclick="SendRegisterRequest">
 
     @response
 </div>
@@ -34,7 +34,7 @@
         if (password == string.Empty || login == string.Empty) return;
         string body = "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}";
 
-        using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/register");
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/login");
         var content = new System.Net.Http.StringContent(body, Encoding.UTF8, "application/json");
         request.Content = content;
 
@@ -46,6 +46,7 @@
             await localStorage.SetAsync("accessToken", $"{registerResponse.accessToken}");
             await localStorage.SetAsync("refreshToken", $"{registerResponse.refreshToken}");
             await localStorage.SetAsync("userId", $"{registerResponse.userId}");
+            
         }
         else
         {
