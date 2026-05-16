@@ -10,11 +10,17 @@ namespace Chess.Backend
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, matchId.ToString());
             await Clients.OthersInGroup(matchId.ToString()).SendAsync("PlayerConnected");
+            Console.WriteLine("Connected" + matchId.ToString());
         }
 
         public async Task SendMove(Guid matchId, string move)
         {
-            await Clients.OthersInGroup(matchId.ToString()).SendAsync("Receive", move);
+            await Clients.OthersInGroup(matchId.ToString()).SendAsync("ReceiveMove", move);
+        }
+
+        public async Task MatchChanged(Guid matchId)
+        {
+            await Clients.OthersInGroup(matchId.ToString()).SendAsync("ReceiveMatchChanged");
         }
     }
 }

@@ -40,11 +40,11 @@
 	public int DarkColor { get; set; }
 	[Parameter]
 	public int LightColor { get; set; }
+	[Parameter]
+	public PieceColor PlayerColor { get; set; }
 
 	private Game game = new Game();
 	private Piece?[] board;
-
-	private PieceColor playerColor = PieceColor.Black;
 
 	protected override void OnInitialized()
 	{
@@ -55,7 +55,7 @@
 
 	private int GetBoardIndexOffset()
 	{
-		if (playerColor == PieceColor.White) return 0;
+		if (PlayerColor == PieceColor.White) return 0;
 		else return Game.CellCount - 1;
 	}
 }

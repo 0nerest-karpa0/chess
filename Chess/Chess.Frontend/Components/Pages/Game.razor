@@ -14,43 +14,49 @@
 @using Microsoft.AspNetCore.SignalR.Client
 
 <PageTitle>Match</PageTitle>
-@if (refreshTokenExpired)
-{
-    <div>
-        <p style="color:red">Refresh Token Was Expired. You need to re-login <a href="/login">here</a>.</p>
-    </div>
-}
-else if (unknownError)
-{
-    <p style="color:red">Unknown error</p>
-}
-else if(match != null)
-{
-    if (!match.isStarted)
+<div class="wrapper">
+    @if (refreshTokenExpired)
     {
-        <div class="wrapper">
-            <div class="player-card">
-                @GetWhitePlayerCard()
-            </div>
-
-            <div class="player-card">
-                @GetBlackPlayerCard()
-            </div>
-
-            @if (match.isHost)
-            {
-                <input type="button" value="switch sides" @onclick="SwitchSides"/>
-                @if (match.canStartMatch)
-                {
-                    <input type="button" value="start match" @onclick="StartMatch" />
-                }
-                <p>
-                Here's match id : @MatchId
-                </p>
-            }
+        <div>
+            <p style="color:red">Refresh Token Was Expired. You need to re-login <a href="/login">here</a>.</p>
         </div>
     }
-}
+    else if (unknownError)
+    {
+        <p style="color:red">Unknown error</p>
+    }
+    else if(match != null)
+    {
+        if (!match.isStarted)
+        {
+            
+                <div class="player-card">
+                    @GetWhitePlayerCard()
+                </div>
+    
+                <div class="player-card">
+                    @GetBlackPlayerCard()
+                </div>
+    
+                @if (match.isHost)
+                {
+                    <input type="button" value="switch sides" @onclick="SwitchSides"/>
+                    @if (match.canStartMatch)
+                    {
+                        <input type="button" value="start match" @onclick="StartMatch" />
+                    }
+                    <p>
+                    Here's match id : @MatchId
+                    </p>
+                }
+            
+        }
+        else
+        {
+            <Board DarkColor="0xd28c45" LightColor="0xffcf9f" PlayerColor="@((PieceColor)Convert.ToInt32(match.playerColor))" />
+        }
+    }
+</div>
 
 @code{
     [Parameter]
@@ -73,7 +79,8 @@ else if(match != null)
         await hub.StartAsync();
 
         hub.On("PlayerConnected", GetInfo);
-        // await hub.InvokeAsync("ConnectToMatch", MatchId);
+        hub.On("ReceiveMatchChanged", GetInfo);
+        await hub.InvokeAsync("ConnectToMatch", MatchId);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -97,7 +104,7 @@ else if(match != null)
             string responseContent = await response.Content.ReadAsStringAsync();
             match = JsonSerializer.Deserialize<MatchInfo>(responseContent);
             matchInfo = responseContent;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
@@ -108,13 +115,12 @@ else if(match != null)
             }
 
             refreshTokenExpired = !successfulRefresh;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
         else
         {
             unknownError = true;
         }
-        request.Dispose();
     }
 
     private async Task SwitchSides()
@@ -179,6 +185,7 @@ else if(match != null)
         if (response.IsSuccessStatusCode)
         {
             GetInfo();
+            await hub.InvokeAsync("MatchChanged", MatchId);
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {

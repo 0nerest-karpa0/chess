@@ -229,9 +229,22 @@ namespace Chess.Backend.Controllers
                     BlackLogin = black != null ? black.Login : null,
                     IsHost = userId == match.HostId,
                     CanStartMatch = userId == match.HostId && white != null && black != null,
+                    PlayerColor = GetPlayerColor(userId, black),
                     IsStarted = match.isStarted,
                 }
             );
+        }
+
+        private bool GetPlayerColor(Guid userId, User black)
+        {
+            if(black == null)
+            {
+                return false;
+            }
+            else
+            {
+                return black.Id == userId;
+            }
         }
 
         public class GetInfoResult
@@ -240,6 +253,8 @@ namespace Chess.Backend.Controllers
             public string? BlackLogin { get; set; }
             public bool IsHost { get; set; }
             public bool CanStartMatch { get; set; }
+            //white -- false, black -- true
+            public bool PlayerColor { get; set; }
             public bool IsStarted { get; set; }
         }
     }
