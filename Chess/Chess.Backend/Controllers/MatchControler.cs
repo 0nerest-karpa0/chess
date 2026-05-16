@@ -223,12 +223,13 @@ namespace Chess.Backend.Controllers
             User black = match.Black;
 
             return Ok(
-                new GetInfoResult 
-                { 
-                    WhiteLogin = white != null ? white.Login:null, 
-                    BlackLogin = black != null ? black.Login:null, 
-                    IsHost = userId == match.HostId, 
-                    IsStarted = match.isStarted
+                new GetInfoResult
+                {
+                    WhiteLogin = white != null ? white.Login : null,
+                    BlackLogin = black != null ? black.Login : null,
+                    IsHost = userId == match.HostId,
+                    CanStartMatch = userId == match.HostId && white != null && black != null,
+                    IsStarted = match.isStarted,
                 }
             );
         }
@@ -238,6 +239,7 @@ namespace Chess.Backend.Controllers
             public string? WhiteLogin { get; set; }
             public string? BlackLogin { get; set; }
             public bool IsHost { get; set; }
+            public bool CanStartMatch { get; set; }
             public bool IsStarted { get; set; }
         }
     }

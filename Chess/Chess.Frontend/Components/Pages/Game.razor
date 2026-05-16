@@ -1,26 +1,217 @@
-﻿@using Chess.Frontend.ChessLogic.Pieces
+﻿@inject HttpClient Client
+@inject ProtectedLocalStorage localStorage;
+@inject NavigationManager navigation;
+@page "/game/{MatchId:guid}";
+
+@using Chess.Frontend.ChessLogic.Pieces
 @using Chess.Frontend.CustomElements
+@using Chess.Frontend.Dto
 @using ChessLogic
-@page "/game/{matchId:guid}"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using System.Net.Http.Headers
+@using System.Text.Json
+@using System.Text
+@using Microsoft.AspNetCore.SignalR.Client
 
 <PageTitle>Match</PageTitle>
-@if (isStarted)
-{
-    <Board LightColor=0xffcf9f DarkColor=0xd28c45 />
-}
-else
+@if (refreshTokenExpired)
 {
     <div>
-
+        <p style="color:red">Refresh Token Was Expired. You need to re-login <a href="/login">here</a>.</p>
     </div>
 }
+else if (unknownError)
+{
+    <p style="color:red">Unknown error</p>
+}
+else if(match != null)
+{
+    if (!match.isStarted)
+    {
+        <div class="wrapper">
+            <div class="player-card">
+                @GetWhitePlayerCard()
+            </div>
 
+            <div class="player-card">
+                @GetBlackPlayerCard()
+            </div>
+
+            @if (match.isHost)
+            {
+                <input type="button" value="switch sides" @onclick="SwitchSides"/>
+                @if (match.canStartMatch)
+                {
+                    <input type="button" value="start match" @onclick="StartMatch" />
+                }
+                <p>
+                Here's match id : @MatchId
+                </p>
+            }
+        </div>
+    }
+}
 
 @code{
-    bool isStarted = false;
+    [Parameter]
+    public Guid MatchId { get; set; }
+    public MatchInfo? match = null;
+    string accessToken;
+    HubConnection hub;
 
-    public void GetInfo()
+    bool refreshTokenExpired = false;
+    bool unknownError = false;
+    string matchInfo = "";
+
+    protected async override Task OnInitializedAsync()
     {
-        
+        hub = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7050/hub")
+            .WithAutomaticReconnect()
+            .Build();
+
+        await hub.StartAsync();
+
+        hub.On("PlayerConnected", GetInfo);
+        // await hub.InvokeAsync("ConnectToMatch", MatchId);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var obj = await localStorage.GetAsync<string>("accessToken");
+            accessToken = obj.Value;
+            GetInfo();
+        }
+    }
+
+    protected async Task GetInfo()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"match/info/{MatchId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            match = JsonSerializer.Deserialize<MatchInfo>(responseContent);
+            matchInfo = responseContent;
+            StateHasChanged();
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            bool successfulRefresh = await RefreshAccessToken();
+            if (successfulRefresh)
+            {
+                GetInfo();
+            }
+
+            refreshTokenExpired = !successfulRefresh;
+            StateHasChanged();
+        }
+        else
+        {
+            unknownError = true;
+        }
+        request.Dispose();
+    }
+
+    private async Task SwitchSides()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"match/switchsides/{MatchId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            GetInfo();
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            bool successfulRefresh = await RefreshAccessToken();
+            if (successfulRefresh)
+            {
+                SwitchSides();
+            }
+
+            refreshTokenExpired = !successfulRefresh;
+            StateHasChanged();
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+
+    private async Task<bool> RefreshAccessToken()
+    {
+        var userId = await localStorage.GetAsync<string>("userId");
+        var refreshToken = await localStorage.GetAsync<string>("refreshToken");
+
+        string body = "{\"userId\":\"" + userId.Value + "\",\"refreshToken\":\"" + refreshToken.Value + "\"}";
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/refresh");
+        var content = new System.Net.Http.StringContent(body, Encoding.UTF8, "application/json");
+        request.Content = content;
+
+        var response = Client.Send(request);
+        string responseContent = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent);
+            await localStorage.SetAsync("accessToken", $"{registerResponse.accessToken}");
+            await localStorage.SetAsync("refreshToken", $"{registerResponse.refreshToken}");
+            await localStorage.SetAsync("userId", $"{registerResponse.userId}");
+
+            accessToken = registerResponse.accessToken;
+        }
+
+        return response.IsSuccessStatusCode;
+    }
+
+    private async Task StartMatch()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"match/start/{MatchId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            GetInfo();
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            bool successfulRefresh = await RefreshAccessToken();
+            if (successfulRefresh)
+            {
+                StartMatch();
+            }
+
+            refreshTokenExpired = !successfulRefresh;
+            StateHasChanged();
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+
+    private string GetWhitePlayerCard()
+    {
+        if (match.whiteLogin == null) 
+        {
+            return "White player -- Not Connected"; 
+        }
+        return $"White player -- {match.whiteLogin}";
+    }
+
+    private string GetBlackPlayerCard()
+    {
+        if (match.blackLogin == null)
+        {
+            return "Black player -- Not Connected";
+        }
+        return $"Black player -- {match.blackLogin}";
     }
 }

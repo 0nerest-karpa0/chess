@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AuthSample.Backend.Entity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Chess.Backend
@@ -8,6 +9,7 @@ namespace Chess.Backend
         public async Task ConnectToMatch(Guid matchId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, matchId.ToString());
+            await Clients.OthersInGroup(matchId.ToString()).SendAsync("PlayerConnected");
         }
 
         public async Task SendMove(Guid matchId, string move)

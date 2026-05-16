@@ -8,6 +8,7 @@
 @using System.Net.Http.Headers
 @using System.Text
 @using System.Text.Json
+@using Microsoft.AspNetCore.SignalR.Client
 
 <div class= "wrapper">
     
@@ -32,23 +33,27 @@
 
     <h4>OR</h4>
     <div class="connect-wrapper">
-            <input class="id-box" type="text" placeholder="Enter Match Id" />
-            <input class="connect-button" type="button" value="Connect" />
+        <input class="id-box" type="text" placeholder="Enter Match Id" @oninput="e => matchIdConnect = e.Value.ToString()" />
+        <input class="connect-button" type="button" value="Connect" @onclick="ConnectToMatch" />
     </div>
 </div>
+
 @code {
     string? accessToken;
     bool IsRegister { get { return accessToken == null; } }
     bool unknownError = false;
     bool refreshTokenExpired = false;
-    Guid? matchId = null;
 
     char color = 'w';
+    string? matchIdConnect = null;
 
     protected async override void OnAfterRender(bool firstRender)
     {
-        var obj = await localStorage.GetAsync<string>("accessToken");
-        accessToken = obj.Value;
+        if (firstRender)
+        {
+            var obj = await localStorage.GetAsync<string>("accessToken");
+            accessToken = obj.Value;
+        }
     }
 
     private async void ChangeColor()
@@ -66,7 +71,38 @@
         if (response.IsSuccessStatusCode)
         {
             string responseContent = await response.Content.ReadAsStringAsync();
-            matchId = JsonSerializer.Deserialize<Guid>(responseContent);
+            Guid? matchId = JsonSerializer.Deserialize<Guid>(responseContent);
+            navigation.NavigateTo($"/game/{matchId}");
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            bool successfulRefresh = await RefreshAccessToken();
+            if (successfulRefresh)
+            {
+                CreateMatch();
+            }
+
+            refreshTokenExpired = !successfulRefresh;
+            StateHasChanged();
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+
+    private async Task ConnectToMatch()
+    {
+        if (matchIdConnect == null) return;
+        Guid matchId;
+        if (!Guid.TryParse(matchIdConnect, out matchId)) return;
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"match/connect/{matchIdConnect}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
             navigation.NavigateTo($"/game/{matchId}");
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)

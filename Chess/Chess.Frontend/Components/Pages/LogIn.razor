@@ -1,5 +1,6 @@
 ﻿@inject HttpClient Client
 @inject ProtectedLocalStorage localStorage;
+@inject NavigationManager navigation;
 @page "/login"
 
 @using System.Net.Mime
@@ -42,11 +43,11 @@
         string responseContent = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
         {
-            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(this.errorMessage);
+            RegisterResponse? registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent);
             await localStorage.SetAsync("accessToken", $"{registerResponse.accessToken}");
             await localStorage.SetAsync("refreshToken", $"{registerResponse.refreshToken}");
             await localStorage.SetAsync("userId", $"{registerResponse.userId}");
-            
+            navigation.NavigateTo("/");
         }
         else
         {
