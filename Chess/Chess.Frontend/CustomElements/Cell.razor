@@ -49,7 +49,7 @@ else
 		{
 			return;
 		}
-		else if(Piece != null && !marked)
+		else if(Piece != null && !marked && Piece.Color == Game.PlayerColor)
 		{
 			Move[] moves = Piece.GetMoves(Game.Board);
 			Game.SelectCells(moves);

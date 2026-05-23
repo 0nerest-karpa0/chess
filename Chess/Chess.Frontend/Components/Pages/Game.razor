@@ -29,7 +29,7 @@
     {
         if (!match.isStarted)
         {
-            
+            <div>
                 <div class="player-card">
                     @GetWhitePlayerCard()
                 </div>
@@ -40,20 +40,21 @@
     
                 @if (match.isHost)
                 {
-                    <input type="button" value="switch sides" @onclick="SwitchSides"/>
+                    <input type="button" value="switch sides" @onclick="SwitchSides" />
                     @if (match.canStartMatch)
                     {
                         <input type="button" value="start match" @onclick="StartMatch" />
                     }
                     <p>
-                    Here's match id : @MatchId
+                        Here's match id : @MatchId
                     </p>
                 }
+            </div>
             
         }
         else
         {
-            <Board DarkColor="0xd28c45" LightColor="0xffcf9f" PlayerColor="@((PieceColor)Convert.ToInt32(match.playerColor))" />
+            <Board DarkColor="0xd28c45" LightColor="0xffcf9f" PlayerColor="@((PieceColor)Convert.ToInt32(match.playerColor))" SendMove="SendMove"/>
         }
     }
 </div>
@@ -80,6 +81,7 @@
 
         hub.On("PlayerConnected", GetInfo);
         hub.On("ReceiveMatchChanged", GetInfo);
+        hub.On<string>("ReceiveMove", Foo);
         await hub.InvokeAsync("ConnectToMatch", MatchId);
     }
 
@@ -132,6 +134,7 @@
         if (response.IsSuccessStatusCode)
         {
             GetInfo();
+            await hub.InvokeAsync("MatchChanged", MatchId);
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
@@ -204,6 +207,11 @@
         }
     }
 
+    public async Task SendMove(string move)
+    {
+        hub.InvokeAsync("SendMove", MatchId, move);
+    }
+
     private string GetWhitePlayerCard()
     {
         if (match.whiteLogin == null) 
@@ -220,5 +228,10 @@
             return "Black player -- Not Connected";
         }
         return $"Black player -- {match.blackLogin}";
+    }
+
+    private void Foo(string move)
+    {
+        Console.WriteLine(move);
     }
 }

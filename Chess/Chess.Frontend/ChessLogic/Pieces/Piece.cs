@@ -7,6 +7,7 @@ namespace Chess.Frontend.ChessLogic.Pieces
         public ChessCoordinates Position { get; set; }
         public abstract string PieceImageUrlWhite { get; set; }
         public abstract string PieceImageUrlBlack { get; set; }
+        public PieceColor Color { get { return color; } }
 
         protected PieceColor color;
         public Piece(PieceColor color)

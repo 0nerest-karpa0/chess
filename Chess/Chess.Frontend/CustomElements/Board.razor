@@ -22,9 +22,8 @@
 			else if (row % 2 != 0 && column % 2 == 0) cellColor = LightColor;
 
 			int boardIndex = column * Rows + row;
-			boardIndex = GetBoardIndexOffset() - boardIndex;
-			<Cell Color="@cellColor" Piece="@(board[boardIndex])" Game="@(game)" MarkedMove="@(game.CellMoves[boardIndex])" />
-			
+			boardIndex = Math.Abs(GetBoardIndexOffset() - boardIndex);
+			<Cell Color="@cellColor" Piece="@(board[boardIndex])" Game="@(game)" MarkedMove="@(game.CellMoves[boardIndex])"/>
 		}
 	}
 </div>
@@ -42,6 +41,8 @@
 	public int LightColor { get; set; }
 	[Parameter]
 	public PieceColor PlayerColor { get; set; }
+	[Parameter]
+	public Func<string, Task> SendMove { get; set; }
 
 	private Game game = new Game();
 	private Piece?[] board;
@@ -50,8 +51,14 @@
 	{
 		board = game.Board;
 		game.UpdateBoard += StateHasChanged;
+		game.SendMove = SendMove;
 		StateHasChanged();
-	}
+    }
+
+    protected override void OnParametersSet()
+    {
+		game.PlayerColor = PlayerColor;
+    }
 
 	private int GetBoardIndexOffset()
 	{

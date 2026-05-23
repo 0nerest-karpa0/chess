@@ -1,0 +1,22 @@
+﻿@page "/test"
+@using Chess.Frontend.CustomElements
+
+<input type="button" @onclick="ChangePlayerColor"/>
+<Board DarkColor="0xd28c45" LightColor="0xffcf9f" PlayerColor = "@playerColor"/>
+<p></p>
+@code {
+    PieceColor playerColor = PieceColor.White;
+
+    private void ChangePlayerColor(MouseEventArgs args)
+    {
+        if(playerColor == PieceColor.Black)
+        {
+            playerColor = PieceColor.White;
+        }
+        else
+        {
+            playerColor = PieceColor.Black;
+        }
+        StateHasChanged();
+    }
+}

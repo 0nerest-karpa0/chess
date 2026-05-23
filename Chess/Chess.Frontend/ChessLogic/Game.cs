@@ -14,8 +14,10 @@ namespace Chess.Frontend.ChessLogic
         public Move?[] CellMoves { get; set; } = new Move?[CellCount];
         public Piece? SelectedPiece { get; set; } = null;
         public PromotionPopup.Parameters PopupParameters { get; set; } = PromotionPopup.Parameters.DefaultParameters();
+        public PieceColor PlayerColor;
         private Pawn? EnPassantPawn = null;
         public event Action UpdateBoard;
+        public Func<string, Task> SendMove { get; set; }
         public static Piece?[] GetBoardFromFen(string fenString)
         {
             Piece?[] board = new Piece?[CellCount];
@@ -45,6 +47,78 @@ namespace Chess.Frontend.ChessLogic
             }
 
             return board;
+        }
+
+        public string ToFen()
+        {
+            string result = "";
+
+            int emptySpacesCount = 0;
+            for(int i = 0; i < Rows * Columns; i++)
+            {
+                if(Board[i] != null && emptySpacesCount > 0)
+                {
+                    result += $"{emptySpacesCount}" + GetFenFromPiece(Board[i]);
+                    emptySpacesCount = 0;
+                }
+                else if(Board[i] != null)
+                {
+                    result += GetFenFromPiece(Board[i]);
+                }
+                else
+                {
+                    emptySpacesCount++;
+                }
+
+                if ((i + 1) % 8 == 0 && emptySpacesCount > 0)
+                {
+                    result += $"{emptySpacesCount}/";
+                    emptySpacesCount = 0;
+                }
+                else if((i + 1) % 8 == 0)
+                {
+                    result += "/";
+                }
+            }
+
+            return result;
+        }
+
+        private char GetFenFromPiece(Piece? piece)
+        {
+            char result;
+
+            if (piece.GetType() == typeof(Pawn))
+            {
+                result = 'p';
+            }
+            else if (piece.GetType() == typeof(Rook))
+            {
+                result = 'r';
+            }
+            else if (piece.GetType() == typeof(Knight))
+            {
+                result = 'n';
+            }
+            else if (piece.GetType() == typeof(King))
+            {
+                result = 'k';
+            }
+            else if (piece.GetType() == typeof(Queen))
+            {
+                result = 'q';
+            }
+            else
+            {
+                result = 'b';
+            }
+
+            if (piece.Color == PieceColor.White)
+            {
+                result = (char)(Convert.ToInt32(result) - 32);
+            }
+
+            return result;
         }
 
         public static Piece? GetPieceFromFen(char piece)
@@ -92,7 +166,7 @@ namespace Chess.Frontend.ChessLogic
             UpdateBoard.Invoke();
         }
 
-        public void MovePiece(Move move)
+        public async Task MovePiece(Move move)
         {
             if (SelectedPiece == null) return;
             ChessCoordinates newPosition = move.newPosition;
@@ -110,7 +184,6 @@ namespace Chess.Frontend.ChessLogic
             if (move.PopupParameters != null)
             {
                 move.PopupParameters.MarginLeft = $"calc({BoardSize} + 5px)";
-                //move.PopupParameters.MarginTop = $"calc({BoardSize} / {Rows} * abs({newPosition.Number - Rows}) + 7px)";
                 move.PopupParameters.MarginTop = $"7px";
                 PopupParameters = move.PopupParameters;
                 DeselectCells();
@@ -133,9 +206,9 @@ namespace Chess.Frontend.ChessLogic
 
             DeselectCells();
             UpdateBoard.Invoke();
+            await SendMove.Invoke(ToFen());
         }
 
-        //TODO: while the popup is visible you can switch to the different piece and promote it
         public void PromotePawn(Piece piece)
         {
             PopupParameters.Visible = false;
@@ -146,7 +219,7 @@ namespace Chess.Frontend.ChessLogic
 
             UpdateBoard.Invoke();
         }
-
+        
         private void MarkEnPassantPossibility(Move move)
         {
             if (EnPassantPawn != null)

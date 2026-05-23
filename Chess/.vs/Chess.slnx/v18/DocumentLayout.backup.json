@@ -7,28 +7,16 @@
       "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\components\\pages\\game.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\controllers\\matchcontroler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\controllers\\matchcontroler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\customelements\\board.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\customelements\\board.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.backend\\matchhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9BBAE4AF-9C61-890E-3838-845CCD4B5780}|Chess.Backend\\Chess.Backend.csproj|solutionrelative:chess.backend\\matchhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\dto\\matchinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\dto\\matchinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\components\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\components\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|c:\\users\\user\\documents\\github\\chess\\chess\\chess.frontend\\chesslogic\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E558580C-482C-2B46-A817-7AB0F104753F}|Chess.Frontend\\Chess.Frontend.csproj|solutionrelative:chess.frontend\\chesslogic\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,34 +26,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MatchInfo.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Dto\\MatchInfo.cs",
-              "RelativeDocumentMoniker": "Chess.Frontend\\Dto\\MatchInfo.cs",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Dto\\MatchInfo.cs",
-              "RelativeToolTip": "Chess.Frontend\\Dto\\MatchInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T08:05:57.521Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MatchControler.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\MatchControler.cs",
-              "RelativeDocumentMoniker": "Chess.Backend\\Controllers\\MatchControler.cs",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\Controllers\\MatchControler.cs",
-              "RelativeToolTip": "Chess.Backend\\Controllers\\MatchControler.cs",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAcwOcAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T08:02:16.486Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -74,9 +36,22 @@
               "RelativeDocumentMoniker": "Chess.Backend\\MatchHub.cs",
               "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Backend\\MatchHub.cs",
               "RelativeToolTip": "Chess.Backend\\MatchHub.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-09T08:56:14.521Z",
+              "WhenOpened": "2026-05-21T15:46:20.409Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Board.razor",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\CustomElements\\Board.razor",
+              "RelativeDocumentMoniker": "Chess.Frontend\\CustomElements\\Board.razor",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\CustomElements\\Board.razor",
+              "RelativeToolTip": "Chess.Frontend\\CustomElements\\Board.razor",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAABUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-18T12:24:14.976Z",
               "EditorCaption": ""
             },
             {
@@ -87,47 +62,23 @@
               "RelativeDocumentMoniker": "Chess.Frontend\\Components\\Pages\\Game.razor",
               "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\Game.razor",
               "RelativeToolTip": "Chess.Frontend\\Components\\Pages\\Game.razor",
-              "ViewState": "AgIAAJkAAAAAAAAAAAAwwLsAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAG4AAAAAAAAAAAD4v3AAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-08T20:20:52.757Z",
+              "WhenOpened": "2026-05-21T15:26:42.824Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Home.razor",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\Home.razor",
-              "RelativeDocumentMoniker": "Chess.Frontend\\Components\\Pages\\Home.razor",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\Home.razor",
-              "RelativeToolTip": "Chess.Frontend\\Components\\Pages\\Home.razor",
-              "ViewState": "AgIAAFAAAAAAAAAAAIAwwGgAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-18T07:32:11.785Z",
+              "Title": "Game.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\ChessLogic\\Game.cs",
+              "RelativeDocumentMoniker": "Chess.Frontend\\ChessLogic\\Game.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\ChessLogic\\Game.cs",
+              "RelativeToolTip": "Chess.Frontend\\ChessLogic\\Game.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKgAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T13:57:04.107Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "LogIn.razor",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\LogIn.razor",
-              "RelativeDocumentMoniker": "Chess.Frontend\\Components\\Pages\\LogIn.razor",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\LogIn.razor",
-              "RelativeToolTip": "Chess.Frontend\\Components\\Pages\\LogIn.razor",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAwwCUAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-17T19:29:24.65Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Register.razor",
-              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\Register.razor",
-              "RelativeDocumentMoniker": "Chess.Frontend\\Components\\Pages\\Register.razor",
-              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\chess\\Chess\\Chess.Frontend\\Components\\Pages\\Register.razor",
-              "RelativeToolTip": "Chess.Frontend\\Components\\Pages\\Register.razor",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAAC8AAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-17T18:27:17.174Z"
             }
           ]
         }
