@@ -75,6 +75,7 @@
         {
             var accessTokenObj = await localStorage.GetAsync<string>("accessToken");
             accessToken = accessTokenObj.Value;
+            if (accessToken == null) navigation.NavigateTo("/login");
             var userIdObj = await localStorage.GetAsync<Guid>("userId");
             userId = userIdObj.Value;
             await GetMatches();
