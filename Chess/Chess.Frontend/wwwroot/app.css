@@ -48,5 +48,8 @@ body{
     --background-color: #000000;
     --background-ancient-color: #191919;
     --ancient-color: #4a5138;
+    --ancient-color-semi-transparent: #4a513887;
     --text-color: #f2f2f2;
+    --chessboard-dark: #d28c45;
+    --chessboard-light: #ffcf9f;
 }

@@ -1,0 +1,47 @@
+﻿@using Chess.Frontend.Dto
+
+<div class="match-card-wrapper" style="@GetMatchCardCss()">
+    <BoardDisplay FenBoard="@Match.lastMoveBoard" Width="max(calc(100vh/4), 104px)"
+        PlayerColor="(PieceColor)Convert.ToInt32(Match.usersColor)" NullFenText="NO MOVES YET" />
+    <div class="player-info">
+        @if (Match.white != null)
+        {
+            <p>White - <a href="@($"/user/{Match.white.id}")">@Match.white.login</a></p>
+        }
+        else
+        {
+            <p>White - not connected</p>
+        }
+
+        @if(Match.black != null)
+        {
+            <p>Black - <a href="@($"/user/{Match.black.id}")">@Match.black.login</a></p>
+        }
+        else
+        {
+            <p>Black - not connected</p>
+        }
+
+        @if(!Match.isEnded)
+        {
+            <b>Still playing</b>
+        }
+        else
+        {
+            <a href="@($"/replay/{Match.id}")"><b>Match Replay</b></a>
+        }
+    </div>
+</div>
+@code {
+    [Parameter]
+    public UserMatch Match { get; set; }
+
+    private string GetMatchCardCss()
+    {
+        if(!Match.isEnded)
+        {
+            return "background-color:#330505";
+        }
+        return "";
+    }
+}

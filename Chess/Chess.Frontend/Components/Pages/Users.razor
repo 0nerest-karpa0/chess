@@ -1,0 +1,50 @@
+﻿@using System.Text.Json
+@using Dto
+@page "/users"
+@inject HttpClient Client;
+
+@if (unknownError)
+{
+    <div style="color:red">unknown error</div>
+}
+else if(errorMessage != null)
+{
+    <div style="color:red">@errorMessage</div>
+}
+else
+{
+    <h3>Here is all users registered on the website</h3>
+    @foreach (UserShortDto user in userArray)
+    {
+        <div class="user-card"><a href="@($"/user/{user.id}")">@user.login</a></div>
+    }
+}
+
+@code {
+    private UserShortDto[] userArray;
+    private bool unknownError = false;
+    private string? errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"users/all");
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string usersJson = await response.Content.ReadAsStringAsync();
+            userArray = JsonSerializer.Deserialize<UserShortDto[]>(usersJson);
+            unknownError = userArray == null;
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            string errorMessageJson = await response.Content.ReadAsStringAsync();
+            errorMessage = JsonSerializer.Deserialize<string>(errorMessageJson);
+            unknownError = errorMessage == null;
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+}

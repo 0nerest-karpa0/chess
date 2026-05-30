@@ -1,0 +1,16 @@
+﻿.cell {
+    aspect-ratio: 1;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.light{
+    background-color:var(--chessboard-light);
+}
+
+.dark{
+    background-color:var(--chessboard-dark)
+}

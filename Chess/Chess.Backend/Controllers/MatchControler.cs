@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Chess.Backend.Dto;
 using Microsoft.AspNetCore.SignalR;
+using Chess.Backend.Db.Entity;
 
 namespace Chess.Backend.Controllers
 {
@@ -194,7 +195,7 @@ namespace Chess.Backend.Controllers
             string[] fenFields = lastMoveFen.Split(' ');
             string lastMoveColor = fenFields[1];
 
-            if (lastMoveColor == userColor)
+            if (lastMoveColor != userColor)
             {
                 return BadRequest("Its not your move yet");
             }
@@ -237,7 +238,7 @@ namespace Chess.Backend.Controllers
 
         private bool GetPlayerColor(Guid userId, User black)
         {
-            if(black == null)
+            if (black == null)
             {
                 return false;
             }
@@ -247,15 +248,40 @@ namespace Chess.Backend.Controllers
             }
         }
 
-        public class GetInfoResult
+        [HttpGet("getmoves/{matchId:guid}")]
+        public IActionResult GetMoves([FromRoute] Guid matchId)
         {
-            public string? WhiteLogin { get; set; }
-            public string? BlackLogin { get; set; }
-            public bool IsHost { get; set; }
-            public bool CanStartMatch { get; set; }
-            //white -- false, black -- true
-            public bool PlayerColor { get; set; }
-            public bool IsStarted { get; set; }
+            Match? match = _context.Matches.Where(m => m.Id == matchId).Include(m => m.Moves).FirstOrDefault();
+            if(match == null)
+            {
+                return NotFound($"Match With id {matchId} doesn't exist");
+            }
+            else if (!match.isEnded)
+            {
+                return BadRequest("You can't moves of match that isn't ended");
+            }
+            else
+            {
+                return Ok(match.Moves.Select(m => new MoveDto { Board = m.Board, IsCheckmate = m.IsCheckmate, IsDraw = m.IsDraw }));
+            }
         }
+    }
+
+    public class GetInfoResult
+    {
+        public string? WhiteLogin { get; set; }
+        public string? BlackLogin { get; set; }
+        public bool IsHost { get; set; }
+        public bool CanStartMatch { get; set; }
+        //white -- false, black -- true
+        public bool PlayerColor { get; set; }
+        public bool IsStarted { get; set; }
+    }
+
+    public class MoveDto
+    {
+        public string Board { get; set; }
+        public bool IsCheckmate { get; set; }
+        public bool IsDraw { get; set; }
     }
 }

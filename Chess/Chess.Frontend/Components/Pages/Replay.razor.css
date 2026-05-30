@@ -1,0 +1,21 @@
+﻿.controls {
+    display: grid;
+    width: max(35vw, 35vh);
+    grid-template-columns: repeat(4, 1fr);
+    aspect-ratio: 4;
+    gap: 0.3vw;
+    margin-top: 0.5vw;
+}
+
+.controls-button {
+    width: 100%;
+    border: none;
+    font-size: 100%;
+    font-weight: bolder;
+    background-color: var(--ancient-color);
+    color: var(--text-color);
+}
+
+    .controls-button:disabled {
+        background-color: var(--ancient-color-semi-transparent);
+    }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Chess.Backend.Db.Entity;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 

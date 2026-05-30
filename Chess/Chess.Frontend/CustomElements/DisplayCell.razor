@@ -1,0 +1,39 @@
+﻿@using Chess.Frontend.ChessLogic.Pieces
+
+<div class="cell @GetCellClass()" style="@GetCellCss()"></div>
+
+@code {
+	[Parameter]
+	public required PieceColor Color { get; set; }
+	[Parameter]
+	public Piece? Piece { get; set; }
+
+	private string? pieceImageUrl { get; set; } = null;
+
+	protected override void OnParametersSet()
+	{
+		if (Piece != null)
+		{
+			pieceImageUrl = Piece.GetImageUrl();
+		}
+	}
+
+	private string GetCellCss()
+	{
+		string css = "";
+		if(Piece != null)
+		{
+			css += $"background-image:url({pieceImageUrl})";
+		}
+		return css;
+	}
+
+	private string GetCellClass()
+	{
+		if(Color == PieceColor.White)
+		{
+			return "light";
+		}
+		return "dark";
+	}
+}

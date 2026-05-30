@@ -14,7 +14,20 @@ namespace Chess.Frontend.ChessLogic
         public Move?[] CellMoves { get; set; } = new Move?[CellCount];
         public Piece? SelectedPiece { get; set; } = null;
         public PromotionPopup.Parameters PopupParameters { get; set; } = PromotionPopup.Parameters.DefaultParameters();
-        public PieceColor PlayerColor;
+        private PieceColor playerColor;
+        public PieceColor PlayerColor 
+        {
+            get
+            {
+                return playerColor;
+            }
+            set 
+            {
+                playerColor = value;
+                IsYourMove = PlayerColor == PieceColor.White;
+            } 
+        }
+        public bool IsYourMove { get; set; }
         private Pawn? EnPassantPawn = null;
         public event Action UpdateBoard;
         public Func<string, Task> SendMove { get; set; }
@@ -75,10 +88,19 @@ namespace Chess.Frontend.ChessLogic
                     result += $"{emptySpacesCount}/";
                     emptySpacesCount = 0;
                 }
-                else if((i + 1) % 8 == 0)
+                else if((i + 1) % 8 == 0 && i + 1 != Rows * Columns)
                 {
                     result += "/";
                 }
+            }
+
+            if(PlayerColor == PieceColor.White)
+            {
+                result += " b ";
+            }
+            else
+            {
+                result += " w ";
             }
 
             return result;
@@ -209,7 +231,7 @@ namespace Chess.Frontend.ChessLogic
             await SendMove.Invoke(ToFen());
         }
 
-        public void PromotePawn(Piece piece)
+        public async Task PromotePawn(Piece piece)
         {
             PopupParameters.Visible = false;
 
@@ -218,6 +240,7 @@ namespace Chess.Frontend.ChessLogic
             Board[pawnPosition.ToPieceIndex()] = piece;
 
             UpdateBoard.Invoke();
+            await SendMove.Invoke(ToFen());
         }
         
         private void MarkEnPassantPossibility(Move move)

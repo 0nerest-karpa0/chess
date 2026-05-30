@@ -1,0 +1,85 @@
+﻿@inject HttpClient Client
+@page "/user/{UserId:guid}";
+@using System.Net.Http.Headers
+@using System.Text.Json;
+@using Chess.Frontend.CustomElements
+@using Dto
+
+@if (unknownError)
+{
+    <div style="color:red">unknown error</div>
+}
+else if(errorMessage != null)
+{
+    <div style="color:red">@errorMessage</div>
+}
+else
+{
+    <h3>@user.login</h3>
+    <p>@($"{user.login}'s matches")</p>
+
+    foreach (UserMatch match in matches)
+    {
+        <MatchCard Match = "@match"/>    
+    }
+}
+
+@code {
+    private UserMatch[]? matches { get; set; }
+    private bool unknownError = false;
+    private string? errorMessage = null;
+    private UserShortDto user { get; set; }
+
+    [Parameter]
+    public Guid UserId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        await this.GetMatches();
+        await this.GetUserInfo();
+    }
+
+    private async Task GetMatches()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"users/{UserId}/matches");
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string matchesJson = await response.Content.ReadAsStringAsync();
+            matches = JsonSerializer.Deserialize<UserMatch[]>(matchesJson);
+            unknownError = matches == null;
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            string errorMessageJson = await response.Content.ReadAsStringAsync();
+            errorMessage = JsonSerializer.Deserialize<string>(errorMessageJson);
+            unknownError = errorMessage == null;
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+
+    private async Task GetUserInfo()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"users/{UserId}/info");
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string userJson = await response.Content.ReadAsStringAsync();
+            user = JsonSerializer.Deserialize<UserShortDto>(userJson);
+            unknownError = user == null;
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            string errorMessageJson = await response.Content.ReadAsStringAsync();
+            errorMessage = errorMessageJson;
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+}

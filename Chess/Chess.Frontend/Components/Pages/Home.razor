@@ -3,6 +3,7 @@
 @inject NavigationManager navigation;
 @page "/"
 
+@using Chess.Frontend.CustomElements
 @using Chess.Frontend.Dto
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using System.Net.Http.Headers
@@ -10,8 +11,27 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.SignalR.Client
 
-<div class= "wrapper">
-    
+<div class= "wrapper" style="height:255%">
+    <a href="/users" style="color:var(--text-color); text-align:right; width:95%;">All users</a>
+
+    <p>Recent matches</p>
+    @if(matches != null && matches.Length != 0)
+    {
+        @foreach (UserMatch match in matches.Take(5))
+        {
+            <MatchCard Match="@match"/>
+        }
+        @if(matches.Length > 5)
+        {
+            <p>And @(matches.Length - 5) more</p>
+            <p>Click <a href="@($"/user/{userId}")">here</a> to see all the matches.</p>
+        }
+    }
+    else
+    {
+        <p>You don't participate in any matches</p>
+    }
+
     <hr/>
 
     <dvi class="create-wrapper">
@@ -39,27 +59,51 @@
 </div>
 
 @code {
-    string? accessToken;
-    bool IsRegister { get { return accessToken == null; } }
-    bool unknownError = false;
-    bool refreshTokenExpired = false;
+    private string? accessToken;
+    private bool IsRegister { get { return accessToken == null; } }
+    private bool unknownError = false;
+    private bool refreshTokenExpired = false;
 
-    char color = 'w';
-    string? matchIdConnect = null;
+    private char color = 'w';
+    private string? matchIdConnect = null;
+    private Guid userId;
+    private UserMatch[]? matches { get; set; }
 
-    protected async override void OnAfterRender(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var obj = await localStorage.GetAsync<string>("accessToken");
-            accessToken = obj.Value;
+            var accessTokenObj = await localStorage.GetAsync<string>("accessToken");
+            accessToken = accessTokenObj.Value;
+            var userIdObj = await localStorage.GetAsync<Guid>("userId");
+            userId = userIdObj.Value;
+            await GetMatches();
         }
     }
+
 
     private async void ChangeColor()
     {
         if (color == 'w') color = 'b';
         else color = 'w';
+    }
+
+    private async Task GetMatches()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"users/{userId}/matches");
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string matchesJson = await response.Content.ReadAsStringAsync();
+            matches = JsonSerializer.Deserialize<UserMatch[]>(matchesJson);
+            unknownError = matches == null;
+        }
+        else
+        {
+            unknownError = true;
+        }
+        await InvokeAsync(StateHasChanged);
     }
 
     private async void CreateMatch()

@@ -1,4 +1,5 @@
 ﻿using AuthSample.Backend.Entity;
+using Chess.Backend.Db.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chess.Backend;

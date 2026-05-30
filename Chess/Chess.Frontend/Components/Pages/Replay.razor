@@ -1,0 +1,74 @@
+﻿@using System.Text.Json
+@using Chess.Frontend.CustomElements
+@using Dto
+
+@page "/replay/{matchId:guid}";
+@inject HttpClient Client
+
+@if (unknownError)
+{
+    <div style="color:red">unknown error</div>
+}
+else if(errorMessage != null)
+{
+    <div style="color:red">@errorMessage</div>
+}
+else
+{
+    <BoardDisplay FenBoard="@moves[moveIndex].board" NullFenText="unknown error" Width="max(35vw, 35vh)" />
+    <div class="controls">
+        @if (moveIndex > 0)
+        {
+            <button class="controls-button" @onclick="_ => moveIndex = 0">&lt;&lt;</button>
+            <button class="controls-button" @onclick="_ => moveIndex--">&lt;</button>
+        }
+        else
+        {
+            <button disabled class="controls-button">&lt;&lt;</button>
+            <button disabled class="controls-button">&lt;</button>
+        }
+
+        @if (moveIndex < moves.Length - 1)
+        {
+            <button class="controls-button" @onclick="_ => moveIndex++">&gt;</button>
+            <button class="controls-button" @onclick="_ => moveIndex = moves.Length - 1">&gt;&gt;</button>
+        }
+        else
+        {
+            <button disabled class="controls-button">&gt;</button>
+            <button disabled class="controls-button">&gt;&gt;</button>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Guid MatchId { get; set; }
+    private string? errorMessage { get; set; } = null;
+    private bool unknownError { get; set; } = false;
+
+    private MoveDto[] moves;
+    int moveIndex = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"match/getmoves/{MatchId}");
+
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            string movesJson = await response.Content.ReadAsStringAsync();
+            moves = JsonSerializer.Deserialize<MoveDto[]>(movesJson);
+            unknownError = moves == null;
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            string errorMessageJson = await response.Content.ReadAsStringAsync();
+            unknownError = errorMessage == null;
+        }
+        else
+        {
+            unknownError = true;
+        }
+    }
+}

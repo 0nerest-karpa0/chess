@@ -1,0 +1,7 @@
+﻿.user-card {
+    background-color: var(--background-ancient-color);
+    margin-bottom: 1.5vh;
+}
+    .user-card > a {
+        color:var(--text-color)
+    }

@@ -1,68 +1,80 @@
 ﻿@using ChessLogic
 @using ChessLogic.Pieces
+@using Microsoft.AspNetCore.SignalR.Client
 
 <style>
-	.board{
-		display: grid;
-		grid-template-columns: repeat(8,1fr);
-		width: max(35vw, 35vh);
-		aspect-ratio: 1;
-	}
+    .board{
+        display: grid;
+        grid-template-columns: repeat(8,1fr);
+        width: max(35vw, 35vh);
+        aspect-ratio: 1;
+    }
 </style>
 
 <div class="board">
-	@for (int column = 0; column < Columns; column++)
-	{
-		for (int row = 0; row < Rows; row++)
-		{
-			int cellColor = 0;
-			if      (row % 2 == 0 && column % 2 != 0) cellColor = LightColor;
-			else if (row % 2 != 0 && column % 2 != 0) cellColor = DarkColor;
-			else if (row % 2 == 0 && column % 2 == 0) cellColor = DarkColor;
-			else if (row % 2 != 0 && column % 2 == 0) cellColor = LightColor;
+    @for (int column = 0; column < Columns; column++)
+    {
+        for (int row = 0; row < Rows; row++)
+        {
+            int cellColor = 0;
+            if      (row % 2 == 0 && column % 2 != 0) cellColor = LightColor;
+            else if (row % 2 != 0 && column % 2 != 0) cellColor = DarkColor;
+            else if (row % 2 == 0 && column % 2 == 0) cellColor = DarkColor;
+            else if (row % 2 != 0 && column % 2 == 0) cellColor = LightColor;
 
-			int boardIndex = column * Rows + row;
-			boardIndex = Math.Abs(GetBoardIndexOffset() - boardIndex);
-			<Cell Color="@cellColor" Piece="@(board[boardIndex])" Game="@(game)" MarkedMove="@(game.CellMoves[boardIndex])"/>
-		}
-	}
+            int boardIndex = column * Rows + row;
+            boardIndex = Math.Abs(GetBoardIndexOffset() - boardIndex);
+            <Cell Color="@cellColor" Piece="@(game.Board[boardIndex])" Game="@(game)" MarkedMove="@(game.CellMoves[boardIndex])"/>
+        }
+    }
 </div>
 
 <PromotionPopup MarginLeft="@game.PopupParameters.MarginLeft" MarginTop="@game.PopupParameters.MarginTop"
-				PieceColor="@game.PopupParameters.PieceColor" Visible="@game.PopupParameters.Visible" Game= "@game"/>
+                PieceColor="@game.PopupParameters.PieceColor" Visible="@game.PopupParameters.Visible" Game= "@game"/>
 
 @code {
-	private const int Rows = Game.Rows;
-	private const int Columns = Game.Columns;
+    private const int Rows = Game.Rows;
+    private const int Columns = Game.Columns;
 
-	[Parameter]
-	public int DarkColor { get; set; }
-	[Parameter]
-	public int LightColor { get; set; }
-	[Parameter]
-	public PieceColor PlayerColor { get; set; }
-	[Parameter]
-	public Func<string, Task> SendMove { get; set; }
+    [Parameter]
+    public int DarkColor { get; set; }
+    [Parameter]
+    public int LightColor { get; set; }
+    [Parameter]
+    public PieceColor PlayerColor { get; set; }
+    [Parameter]
+    public Func<string, Task> SendMove { get; set; }
 
-	private Game game = new Game();
-	private Piece?[] board;
+    private Game game = new Game();
+    //private Piece?[] board;
+    [Parameter]
+    public HubConnection hub { get; set; }
 
-	protected override void OnInitialized()
-	{
-		board = game.Board;
-		game.UpdateBoard += StateHasChanged;
-		game.SendMove = SendMove;
-		StateHasChanged();
+    protected override async Task OnInitializedAsync()
+    {
+        game.UpdateBoard += StateHasChanged;
+        game.SendMove = SendMove;
+
+        hub.On<string>("ReceiveMove", HandleReceive);
+        StateHasChanged();
     }
 
     protected override void OnParametersSet()
     {
-		game.PlayerColor = PlayerColor;
+        game.PlayerColor = PlayerColor;
     }
 
-	private int GetBoardIndexOffset()
-	{
-		if (PlayerColor == PieceColor.White) return 0;
-		else return Game.CellCount - 1;
-	}
+    private int GetBoardIndexOffset()
+    {
+        if (PlayerColor == PieceColor.White) return 0;
+        else return Game.CellCount - 1;
+    }
+
+    private async Task HandleReceive(string move)
+    {
+        Console.WriteLine(move);
+        game.Board = Game.GetBoardFromFen(move);
+        game.IsYourMove = !game.IsYourMove;
+        await InvokeAsync(StateHasChanged);
+    }
 }

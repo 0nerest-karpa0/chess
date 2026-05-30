@@ -1,0 +1,23 @@
+﻿.board {
+    display: grid;
+    grid-template-columns: repeat(8,1fr);
+    aspect-ratio: 1;
+}
+
+.board-coverup {
+    background-color: var(--ancient-color-semi-transparent);
+    aspect-ratio: 1;
+    position: absolute;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.null-fen-text {
+    color: var(--ancient-color);
+    width: calc(sqrt(2)*100% - 20%);
+    text-align: justify;
+    text-align-last: justify;
+    transform: rotate(-45deg);
+}

@@ -3,66 +3,66 @@
 
 @if(Piece == null)
 {
-	<div class="cell" onclick=@(HandleClick) style="background-color:@($"#{Convert.ToString(Color, 16)}");">
-		@if (marked)
-		{
-			<div class="marking"></div>
-		}
-	</div>
+    <div class="cell" onclick=@(HandleClick) style="background-color:@($"#{Convert.ToString(Color, 16)}");">
+        @if (marked)
+        {
+            <div class="marking"></div>
+        }
+    </div>
 }
 else
 {
-	<div class="cell" onclick=@(HandleClick) style="background-color:@($"#{Convert.ToString(Color, 16)}"); background-image:@($"url({pieceImageUrl})")">
-		@if (marked)
-		{
-			<div class="marking-capture"></div>
-		}
-	</div>
+    <div class="cell" onclick=@(HandleClick) style="background-color:@($"#{Convert.ToString(Color, 16)}"); background-image:@($"url({pieceImageUrl})")">
+        @if (marked)
+        {
+            <div class="marking-capture"></div>
+        }
+    </div>
 }
 
 
 @code {
-	//TODO: Убрать все установку параметров MarkedMove и Piece, и подтягивать их из Game
-	[Parameter]
-	public required int Color { get; set; }
-	[Parameter]
-	public Piece? Piece { get; set; }
-	[Parameter]
-	public required Game Game { get; set; }
-	[Parameter]
-	public Move? MarkedMove { get; set; } = null;
-	private bool marked { get { return MarkedMove != null; } }
+    //TODO: Убрать все установку параметров MarkedMove и Piece, и подтягивать их из Game
+    [Parameter]
+    public required int Color { get; set; }
+    [Parameter]
+    public Piece? Piece { get; set; }
+    [Parameter]
+    public required Game Game { get; set; }
+    [Parameter]
+    public Move? MarkedMove { get; set; } = null;
+    private bool marked { get { return MarkedMove != null; } }
 
-	private string? pieceImageUrl = null;
+    private string? pieceImageUrl = null;
 
-	protected override void OnParametersSet()
-	{
-		if(Piece != null) 
-		{
-			pieceImageUrl = Piece.GetImageUrl();
-		}
-	}
+    protected override void OnParametersSet()
+    {
+        if(Piece != null) 
+        {
+            pieceImageUrl = Piece.GetImageUrl();
+        }
+    }
 
-	private void HandleClick()
-	{
-		if (Game.PopupParameters.Visible)
-		{
-			return;
-		}
-		else if(Piece != null && !marked && Piece.Color == Game.PlayerColor)
-		{
-			Move[] moves = Piece.GetMoves(Game.Board);
-			Game.SelectCells(moves);
-			Game.SelectedPiece = Piece;
-		}
-		else if (marked)
-		{
-			Game.MovePiece(MarkedMove);
-		}
-		else if (!marked)
-		{
-			Game.DeselectCells();
-			Game.SelectedPiece = null;
-		}
-	}
+    private void HandleClick()
+    {
+        if (Game.PopupParameters.Visible || !Game.IsYourMove)
+        {
+            return;
+        }
+        else if(Piece != null && !marked && Piece.Color == Game.PlayerColor)
+        {
+            Move[] moves = Piece.GetMoves(Game.Board);
+            Game.SelectCells(moves);
+            Game.SelectedPiece = Piece;
+        }
+        else if (marked)
+        {
+            Game.MovePiece(MarkedMove);
+        }
+        else if (!marked)
+        {
+            Game.DeselectCells();
+            Game.SelectedPiece = null;
+        }
+    }
 }

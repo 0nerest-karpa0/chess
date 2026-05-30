@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AuthSample.Backend.Entity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AuthSample.Backend.Entity
+namespace Chess.Backend.Db.Entity
 {
     public class Match
     {

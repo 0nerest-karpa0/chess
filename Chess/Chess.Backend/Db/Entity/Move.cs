@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Chess.Backend.Db.Entity;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuthSample.Backend.Entity
 {

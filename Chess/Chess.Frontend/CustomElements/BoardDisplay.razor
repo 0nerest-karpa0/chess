@@ -1,0 +1,58 @@
+﻿@using Chess.Frontend.ChessLogic
+@using Chess.Frontend.ChessLogic.Pieces
+
+<div style="width: @Width;">
+	<div class="board">
+		@for (int column = 0; column < Game.Columns; column++)
+		{
+			for (int row = 0; row < Game.Rows; row++)
+			{
+				PieceColor cellColor = 0;
+				if (row % 2 == 0 && column % 2 != 0) cellColor = PieceColor.White;
+				else if (row % 2 != 0 && column % 2 != 0) cellColor = PieceColor.Black;
+				else if (row % 2 == 0 && column % 2 == 0) cellColor = PieceColor.Black;
+				else if (row % 2 != 0 && column % 2 == 0) cellColor = PieceColor.White;
+
+				int boardIndex = column * Game.Rows + row;
+				boardIndex = Math.Abs(GetBoardIndexOffset() - boardIndex);
+				<DisplayCell Color="@cellColor" Piece="@(board[boardIndex])" />
+			}
+		}
+	</div>
+	@if (FenBoard == null)
+	{
+		<div class="board-coverup" style="width: @Width; transform: translate(0px, calc(-1 * @Width));">
+			<div class="null-fen-text">@NullFenText</div>
+		</div>
+	}
+</div>
+@code {
+	[Parameter]
+	public string? FenBoard { get; set; }
+	[Parameter]
+	public PieceColor PlayerColor { get; set; }
+	[Parameter]
+	public string Width { get; set; }
+	[Parameter]
+	public string NullFenText { get; set; }
+
+	private Piece?[] board { get; set; }
+
+	protected override void OnParametersSet()
+	{
+		if(FenBoard != null)
+		{
+			board = Game.GetBoardFromFen(FenBoard);
+		}
+		else
+		{
+			board = new Piece?[Game.Rows * Game.Columns];
+		}
+	}
+
+	private int GetBoardIndexOffset()
+	{
+		if (PlayerColor == PieceColor.White) return 0;
+		else return Game.CellCount - 1;
+	}
+}

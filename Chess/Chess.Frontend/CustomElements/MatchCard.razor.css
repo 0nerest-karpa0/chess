@@ -1,0 +1,20 @@
+﻿.match-card-wrapper {
+    background-color: var(--background-ancient-color);
+    border: solid var(--text-color);
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 1vw;
+    padding: 0.8vmax;
+    margin-bottom: max(3vh,12.45px);
+    height: max(calc(100vh/4), 104px)
+}
+
+.player-info{
+    height:fit-content;
+    align-self:center;
+}
+
+a {
+    color: var(--text-color)
+}

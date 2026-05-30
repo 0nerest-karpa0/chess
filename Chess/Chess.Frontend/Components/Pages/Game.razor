@@ -40,7 +40,7 @@
     
                 @if (match.isHost)
                 {
-                    <input type="button" value="switch sides" @onclick="SwitchSides" />
+                    <input type="button" value="switch sides" @onclick="SwitchSides"/>
                     @if (match.canStartMatch)
                     {
                         <input type="button" value="start match" @onclick="StartMatch" />
@@ -54,7 +54,7 @@
         }
         else
         {
-            <Board DarkColor="0xd28c45" LightColor="0xffcf9f" PlayerColor="@((PieceColor)Convert.ToInt32(match.playerColor))" SendMove="SendMove"/>
+            <Board DarkColor="0xd28c45" LightColor="0xffcf9f" PlayerColor="@((PieceColor)Convert.ToInt32(match.playerColor))" SendMove="SendMove" hub="@hub"/>
         }
     }
 </div>
@@ -81,7 +81,7 @@
 
         hub.On("PlayerConnected", GetInfo);
         hub.On("ReceiveMatchChanged", GetInfo);
-        hub.On<string>("ReceiveMove", Foo);
+        //hub.On<string>("ReceiveMove", Foo);
         await hub.InvokeAsync("ConnectToMatch", MatchId);
     }
 
@@ -209,7 +209,32 @@
 
     public async Task SendMove(string move)
     {
-        hub.InvokeAsync("SendMove", MatchId, move);
+       // hub.InvokeAsync("SendMove", MatchId, move);
+        var request = new HttpRequestMessage(HttpMethod.Post, $"match/makemove/{MatchId}");
+        MoveDto moveDto = new MoveDto  { board = move, isCheckmate = false, isDraw = false, };
+        request.Content = new System.Net.Http.StringContent(JsonSerializer.Serialize(moveDto), Encoding.UTF8, "application/json");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        
+        var response = Client.Send(request);
+        if (response.IsSuccessStatusCode)
+        {
+            hub.InvokeAsync("SendMove", MatchId, move);
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            bool successfulRefresh = await RefreshAccessToken();
+            if (successfulRefresh)
+            {
+                SendMove(move);
+            }
+        
+            refreshTokenExpired = !successfulRefresh;
+            await InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            unknownError = true;
+        }
     }
 
     private string GetWhitePlayerCard()
