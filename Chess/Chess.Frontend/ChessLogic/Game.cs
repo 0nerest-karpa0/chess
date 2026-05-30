@@ -228,6 +228,7 @@ namespace Chess.Frontend.ChessLogic
 
             DeselectCells();
             UpdateBoard.Invoke();
+            IsYourMove = !IsYourMove;
             await SendMove.Invoke(ToFen());
         }
 
